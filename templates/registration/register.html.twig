@@ -26,7 +26,7 @@
             {{ form_label(registrationForm.telephone) }}
             {{ form_widget(registrationForm.telephone) }}
             {% for errorItem in registrationForm.telephone.vars.errors %}
-                <div class="flex justify-center items-center mt-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
+                <div class="flex justify-center items-center mt-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
             {% endfor %}
 
         </div>

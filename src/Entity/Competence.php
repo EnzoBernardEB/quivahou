@@ -61,6 +61,10 @@ class Competence
     {
         return $this->categorie_id;
     }
+    public function __toString(): string
+    {
+        return $this->getCategorieId();
+    }
 
     public function setCategorieId(?Categorie $categorie_id): self
     {

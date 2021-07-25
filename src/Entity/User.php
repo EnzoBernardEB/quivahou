@@ -84,12 +84,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=35)
      * @Assert\Regex(
-     *     pattern="/\D/",
-     *     match=false,
-     *     message="Votre numéro ne doit contenir que des chiffres."
+     *     pattern="/\d{6,12}/",
+     *     match=true,
+     *     message="Votre numéro doit être composer entre 6 et 12 chiffres uniquement."
      * )
      */
     private $telephone;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isCompleted = false;
 
     public function __construct()
     {
@@ -331,6 +336,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getIsCompleted(): ?bool
+    {
+        return $this->isCompleted;
+    }
+
+    public function setIsCompleted(bool $isCompleted): self
+    {
+        $this->isCompleted = $isCompleted;
 
         return $this;
     }
