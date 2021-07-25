@@ -35,9 +35,15 @@ class Competence
      */
     private $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Experience::class, mappedBy="competence_utilise")
+     */
+    private $experiences;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->experiences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,6 +101,33 @@ class Competence
     {
         if ($this->users->removeElement($user)) {
             $user->removeCompetenceId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Experience[]
+     */
+    public function getExperiences(): Collection
+    {
+        return $this->experiences;
+    }
+
+    public function addExperience(Experience $experience): self
+    {
+        if (!$this->experiences->contains($experience)) {
+            $this->experiences[] = $experience;
+            $experience->addCompetenceUtilise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExperience(Experience $experience): self
+    {
+        if ($this->experiences->removeElement($experience)) {
+            $experience->removeCompetenceUtilise($this);
         }
 
         return $this;

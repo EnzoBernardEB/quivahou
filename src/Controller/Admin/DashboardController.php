@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Categorie;
 use App\Entity\Competence;
+use App\Entity\TypeMission;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -31,5 +32,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-address-card', User::class);
         yield MenuItem::linkToCrud('Catégorie', 'fas fa-list-alt', Categorie::class);
         yield MenuItem::linkToCrud('Compétence', 'fas fa-clipboard-list ', Competence::class);
+        yield MenuItem::linkToCrud('Type experience', 'fas fa-align-justify ', TypeMission::class);
     }
 }
