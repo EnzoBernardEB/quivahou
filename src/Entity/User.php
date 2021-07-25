@@ -300,6 +300,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->competence_id;
     }
 
+
     public function addCompetenceId(Competence $competenceId): self
     {
         if (!$this->competence_id->contains($competenceId)) {
