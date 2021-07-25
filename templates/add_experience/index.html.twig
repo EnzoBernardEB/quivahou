@@ -3,18 +3,22 @@
 {% block title %}Hello AddExperienceController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="col-span-full">
+    {{ form_start(formExperience,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+    {{ form_label(formExperience.nom) }}
+    {{ form_widget(formExperience.nom) }}
+    {{ form_label(formExperience.descriptif) }}
+    {{ form_widget(formExperience.descriptif) }}
+    {{ form_label(formExperience.competence_utilise) }}
+    {{ form_widget(formExperience.competence_utilise) }}
+    {{ form_label(formExperience.type) }}
+    {{ form_widget(formExperience.type) }}
+    <span class="self-end">
+       {{ form_widget(formExperience) }}
+    </span>
+    <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Suivant</a></div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/ecf_symfony/src/Controller/AddExperienceController.php'|file_link(0) }}">src/Controller/AddExperienceController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/ecf_symfony/templates/add_experience/index.html.twig'|file_link(0) }}">templates/add_experience/index.html.twig</a></code></li>
-    </ul>
+    {{ form_end(formExperience) }}
 </div>
 {% endblock %}

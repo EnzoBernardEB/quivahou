@@ -40,6 +40,13 @@ class Experience
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="experience")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+
     public function __construct()
     {
         $this->competence_utilise = new ArrayCollection();
@@ -102,6 +109,10 @@ class Experience
     {
         return $this->type;
     }
+    public function __toString(): string
+    {
+        return $this->getType();
+    }
 
     public function setType(?TypeMission $type): self
     {
@@ -109,4 +120,17 @@ class Experience
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+    
 }

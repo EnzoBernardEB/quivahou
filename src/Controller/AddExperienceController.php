@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Experience;
+use App\Form\ExperienceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,25 +14,12 @@ class AddExperienceController extends AbstractController
     #[Route('profil/add/experience', name: 'add_experience')]
     public function index(Request$request,EntityManagerInterface $entityManager): Response
     {
-        $formAddExperience = $this->createForm(Experience::class);
+        $formAddExperience = $this->createForm(ExperienceType::class);
         $formAddExperience->handleRequest($request);
 
-        if ($formAddExperience->isSubmitted() && $formAddExperience->isValid()) {
 
-            $userExperience = $formAddExperience->getData();
-
-
-            $user=$this->getUser();
-
-            $user->addCompetenceId($competence);
-
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->redirectToRoute('add_competence');
-        }
         return $this->render('add_experience/index.html.twig', [
-            'controller_name' => 'AddExperienceController',
+            'formExperience' => $formAddExperience->createView(),
         ]);
     }
 }

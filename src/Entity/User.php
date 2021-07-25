@@ -96,12 +96,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $isCompleted = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $experience;
+
+
     public function __construct()
     {
         $this->collegue_id = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->competence_id = new ArrayCollection();
         $this->date_de_naissance= new \DateTime();
+        $this->experience = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -352,4 +359,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Experience[]
+     */
+    public function getExperience(): Collection
+    {
+        return $this->experience;
+    }
+
+    public function addExperience(Experience $experience): self
+    {
+        if (!$this->experience->contains($experience)) {
+            $this->experience[] = $experience;
+            $experience->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExperience(Experience $experience): self
+    {
+        if ($this->experience->removeElement($experience)) {
+            // set the owning side to null (unless already changed)
+            if ($experience->getUser() === $this) {
+                $experience->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
