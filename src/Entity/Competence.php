@@ -62,15 +62,16 @@ class Competence
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->getNom();
+    }
 
     public function getCategorieId(): ?Categorie
     {
         return $this->categorie_id;
     }
-    public function __toString(): string
-    {
-        return $this->getCategorieId();
-    }
+
 
     public function setCategorieId(?Categorie $categorie_id): self
     {

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Form\CompetenceType;
+use App\Repository\CompetenceRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,17 +20,21 @@ class AddCompetenceController extends AbstractController
         $formAddCompetence->handleRequest($request);
 
         if ($formAddCompetence->isSubmitted() && $formAddCompetence->isValid()) {
+
             $userCompetence = $formAddCompetence->getData();
-            dd($userCompetence);
+            $competenceName= $userCompetence->getNom();
+            $competence=$competenceRepository->findOneBy(['nom'=>$competenceName]);
 
             $user=$this->getUser();
-            $user->addCompetenceId($userCompetence);
+
+            $user->addCompetenceId($competence);
+
 
             $entityManager->persist($user);
             $entityManager->flush();
             $this->redirectToRoute('add_competence');
+            }
 
-        }
 
         return $this->render('add_competence/index.html.twig', [
             'formCompetence' => $formAddCompetence->createView(),

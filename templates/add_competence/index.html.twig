@@ -3,20 +3,17 @@
 {% block title %}Hello AddCompetenceController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="col-span-full">
     {{ form_start(formCompetence,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
-    {{ form_label(formCompetence.categorie_id) }}
-    {{ form_widget(formCompetence.categorie_id) }}
+    {{ form_label(formCompetence.nom) }}
+    {{ form_widget(formCompetence.nom) }}
     <span class="self-end">
        {{ form_widget(formCompetence.Ajouter) }}
     </span>
+    <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Suivant</a></div>
+
     {{ form_end(formCompetence) }}
 
-    {{ dump(app.user.competenceId.values) }}
 </div>
 {% endblock %}
