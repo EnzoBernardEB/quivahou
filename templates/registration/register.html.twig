@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class=" flex justify-center items-center
+        text-gray-300 text-2xl
+        col-span-full border rounded-2xl bg-red-300" role="alert">{{ flashError }}</div>    {% endfor %}
+
+
+    <h1 class="col-span-full row-auto text-4xl font-bold text-center text-gray-300">S'inscrire sur notre plateforme</h1>
+    <div class=" flex col-span-full row-auto m-auto w-11/12 mt-6 bg-gray-300 p-4 border rounded-2xl">
+        {{ form_start(registrationForm,{'attr': {'class': 'flex flex-col w-2/4 text-xl'}}) }}
+        <div class="flex flex-col mb-2">
+
+            {{ form_label(registrationForm.nom) }}
+            {{ form_widget(registrationForm.nom) }}
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(registrationForm.prenom) }}
+            {{ form_widget(registrationForm.prenom) }}
+
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(registrationForm.telephone) }}
+            {{ form_widget(registrationForm.telephone) }}
+            {% for errorItem in registrationForm.telephone.vars.errors %}
+                <div class="flex justify-center items-center mt-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
+            {% endfor %}
+
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(registrationForm.dateDeNaissance) }}
+            {{ form_widget(registrationForm.dateDeNaissance) }}
+        </div>
+        <div class="flex mb-2 ">
+            {{ form_widget(registrationForm.plainPassword) }}
+        </div>
+        <div class="flex items-baseline mb-2">
+            {{ form_label(registrationForm.agreeTerms) }}
+            {{ form_widget(registrationForm.agreeTerms) }}
+        </div>
+        {% for errorItem in registrationForm.email.vars.errors %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
+        {% endfor %}
+        {% for errorItem in registrationForm.plainPassword.children.first.vars.errors %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
+        {% endfor %}
+        <div class="flex justify-end">
+            {{ form_widget(registrationForm.postuler) }}
+        </div>
+        {{ form_end(registrationForm) }}
+        <div class="w-2/4 ml-2">
+            <img src="https://picsum.photos/500" alt="déco ou texte" class="m-auto object-fill">
+        </div>
+    </div>
+
+{% endblock %}

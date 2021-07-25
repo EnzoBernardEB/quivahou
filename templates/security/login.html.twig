@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="col-span-full">
+        <form method="post" class="bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% for message in app.flashes('temp') %}
+                <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('notFullyAuth') %}
+                <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+            {% endfor %}
+            <h1 class="text-2xl font-bold mb-4">Connexion : </h1>
+            <div class="flex flex-col mb-4">
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"
+                       autocomplete="email" required autofocus>
+            </div>
+            <div class="flex flex-col mb-4">
+                <label for="inputPassword">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" class="form-control"
+                       autocomplete="current-password" required>
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+            </div>
+
+
+
+            {#
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Remember me
+                </label>
+            </div>
+            #}
+
+            <button class="border border-gray-400 p-2 rounded-2xl
+                    hover:border-gray-900
+                    bg-gray-900 hover:bg-gray-500
+                    text-gray-300 hover:text-gray-900" type="submit">
+                Se connecter
+            </button>
+        </form>
+    </div>
+
+{% endblock %}

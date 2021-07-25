@@ -1,19 +1,41 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body class="h-screen">
+<header class="relative flex items-center justify-between p-4 h-24 bg-gray-700 text-gray-300">
+    {% block header %}
+        <div class="text-4xl font-bold self-left">
+            <a href="{{ path('app_profil') }}">Qivahou</a>
+        </div>
+        <div class="">
+            {% if app.user %}
+                <div class="mb-3 flex flex-col justify-center items-end">
+                    <p class="mb-2">Vous êtes connecté en tant que : {{ app.user.prenom }} {{ app.user.nom }}</p>
+                    <a href="{{ path('app_logout') }}" class=" p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Se déconnecter</a>
+                </div>
+                {% else %}
+                    <a href="{{ path('app_register') }}" class=" button-auth mr-6 p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">S'inscrire</a>
+                    <a href="{{ path('app_login') }}" class="button-auth p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Se connecter</a>
+            {% endif %}
+
+        </div>
+
+    {% endblock %}
+</header>
+<main class="grid grid-cols-12 grid-rows-mod bg-gray-600 p-4 h-screen">
+    {% block body %}{% endblock %}
+</main>
+</body>
 </html>
