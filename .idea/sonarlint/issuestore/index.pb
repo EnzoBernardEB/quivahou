@@ -15,8 +15,6 @@ E
 assets/styles/app.css,5\8\58d82e459ad700473925afc6a4d3ceb1cbdfdf19
 I
 config/packages/twig.yaml,8\a\8a5c55d47e428b829ef7645f00a0b768cef8a5bf
-S
-#src/Controller/ProfilController.php,4\e\4ef337d549caab4ab9a9142639449d73843cfeaa
 <
 package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
 B
@@ -25,10 +23,6 @@ H
 templates/base.html.twig,f\f\ffb3f1cfd73fdec1f0c80c63d0b5bbc1fff22022
 V
 &src/Security/QuivahouAuthenticator.php,d\f\dffb9cfce7dc38ac8e76fe77a9358a2227798ab2
-Y
-)src/Controller/RegistrationController.php,b\6\b6a5dce1eac6107738aa6c9b363b605aa2315b2c
-U
-%src/Controller/SecurityController.php,7\c\7cc876ecdb4df676c79a6188e9f3ac45e5079434
 N
 src/Security/EmailVerifier.php,2\5\25e59371ba89f9e954d6b099fbe6b12c60340c70
 c
@@ -47,7 +41,13 @@ M
 ,src/Controller/Admin/DashboardController.php,3\a\3acc055723ea518defe4155e99f973ac20e2e524
 P
  templates/profil/index.html.twig,6\e\6e719bc40adccee27be6f663d2394f005e81ef7e
-J
-src/Entity/TypeMission.php,a\e\ae0f9bc91a4c16d3eb3a49d917769493903eb00f
 H
 src/Entity/Categorie.php,2\a\2abee1e33e04f2b852dbc64abffad670df092eac
+W
+'src/Repository/CompetenceRepository.php,8\9\8993fa1bf7633ab073cec31454088432e155edd4
+Q
+!src/Repository/UserRepository.php,9\4\943a623b5e2fd95ea78f6287fc600a6f8e0a5235
+[
++src/EventSubscriber/EasyAdminSubscriber.php,7\3\73af2d9197dd374104284cc087ef96732873d89d
+R
+"templates/security/login.html.twig,8\9\89d5f9595fc54c90b0c2626c3e5e07e23a679864

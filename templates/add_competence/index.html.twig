@@ -4,16 +4,25 @@
 
 {% block body %}
 
-<div class="col-span-full">
-    {{ form_start(formCompetence,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
-    {{ form_label(formCompetence.nom) }}
-    {{ form_widget(formCompetence.nom) }}
-    <span class="self-end">
+    <div class="col-span-full">
+        {{ form_start(formCompetence,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+        {{ form_label(formCompetence.nom) }}
+        {{ form_widget(formCompetence.nom) }}
+        <span class="self-end">
        {{ form_widget(formCompetence.Ajouter) }}
-    </span>
-    <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Suivant</a></div>
+        </span>
+        <p class="font-bold underline">Mes compétences :</p>
+        <ul class="flex mt-2 ">
+        {% for competence in app.user.competenceId %}
+                <li class="p-2  mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">{{ competence }}</li>
+        {% endfor %}
+        </ul>
+        <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Suivant</a></div>
 
-    {{ form_end(formCompetence) }}
 
-</div>
+        {{ form_end(formCompetence) }}
+
+
+    </div>
+
 {% endblock %}

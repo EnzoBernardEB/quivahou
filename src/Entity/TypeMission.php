@@ -43,6 +43,10 @@ class TypeMission
     {
         return $this->intitule;
     }
+    public function __toString(): string
+    {
+        return $this->getIntitule();
+    }
 
     public function setIntitule(string $intitule): self
     {

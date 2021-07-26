@@ -20,7 +20,7 @@ class CompetenceType extends AbstractType
                 'label_attr'=>[
                     'class'=>'text-2xl mb-2'
                 ],
-                'choice_label'=> function ($competence) {
+                'choice_label'=> function (Competence $competence) {
                 return $competence->getNom();
                 }
             ])
