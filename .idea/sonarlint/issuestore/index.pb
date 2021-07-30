@@ -1,16 +1,12 @@
 
 4
 .env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
-F
-src/Entity/Adresse.php,7\1\714d6686c2bcd129af55ecf95c160ccdaa1923fd
 =
 composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
 A
 postcss.config.js,3\f\3f70684581fd16ab3be77ca959e0138ef3ee8bfb
 A
 webpack.config.js,d\5\d5595158cc48f9bf3e51b06f6e6805a8fd2d6262
-T
-$migrations/Version20210724101307.php,0\e\0efd566c99287d9c4c52b300abc5507f762ccdd6
 E
 assets/styles/app.css,5\8\58d82e459ad700473925afc6a4d3ceb1cbdfdf19
 I
@@ -27,8 +23,6 @@ N
 src/Security/EmailVerifier.php,2\5\25e59371ba89f9e954d6b099fbe6b12c60340c70
 c
 3templates/registration/confirmation_email.html.twig,f\6\f6f0bd1d1720e6ce3329b02b7359f48dfc424393
-Q
-!src/Form/RegistrationFormType.php,9\5\95d4b58438357928efb9c5a862a6d289d874e878
 Y
 )templates/registration/register.html.twig,1\c\1c8c7e669830383faba8ed6ab3baf68e465540f5
 `
@@ -39,8 +33,6 @@ M
 config/packages/security.yaml,c\5\c5f941b4d4e9404f23935164fabdd261abb68e93
 \
 ,src/Controller/Admin/DashboardController.php,3\a\3acc055723ea518defe4155e99f973ac20e2e524
-P
- templates/profil/index.html.twig,6\e\6e719bc40adccee27be6f663d2394f005e81ef7e
 H
 src/Entity/Categorie.php,2\a\2abee1e33e04f2b852dbc64abffad670df092eac
 W
@@ -49,5 +41,51 @@ Q
 !src/Repository/UserRepository.php,9\4\943a623b5e2fd95ea78f6287fc600a6f8e0a5235
 [
 +src/EventSubscriber/EasyAdminSubscriber.php,7\3\73af2d9197dd374104284cc087ef96732873d89d
+I
+src/Entity/Competence.php,3\7\37f597c1d59a6e7baa9f156ecc3ca33a08a4069b
+J
+src/Entity/TypeMission.php,a\e\ae0f9bc91a4c16d3eb3a49d917769493903eb00f
+U
+%src/Controller/SecurityController.php,7\c\7cc876ecdb4df676c79a6188e9f3ac45e5079434
+Y
+)src/Controller/RegistrationController.php,b\6\b6a5dce1eac6107738aa6c9b363b605aa2315b2c
+Z
+*src/Controller/AddCompetenceController.php,0\f\0f7b0d4aabbca66e35efbd234d8ebffcaf314663
+K
+src/Form/ExperienceType.php,b\b\bb3af19f1041744bfeadfb65c7d3408baca120f2
+Z
+*src/Controller/AddExperienceController.php,4\3\436313d86c0741f90cde44c9cae7b35d75e823f3
+X
+(templates/add_experience/index.html.twig,a\5\a5e001e1533001c44c424f6ee9b140ddd99ea988
+Q
+!src/Form/RegistrationFormType.php,9\5\95d4b58438357928efb9c5a862a6d289d874e878
+I
+src/Entity/Experience.php,a\0\a0eba14d002e101212ca982a41a6aba63fe93001
+N
+config/packages/validator.yaml,d\8\d87ace3c9cf646c28e05e6aac383e4fc147f0b74
+K
+src/Form/CompetenceType.php,1\1\1103ab8057fa405c22f69df27219d3fe5bd92757
+X
+(templates/add_competence/index.html.twig,2\a\2a1b01c5a6874e6743bb4b904ef423b1bbad6430
+\
+,src/Controller/InscriptionFiniController.php,0\6\06f694dad5a7cd550a7d42146b701a92e465c642
+G
+src/Entity/Document.php,2\2\222a95a51abea5e03d0c982b9dc7576e49f39e88
 R
 "templates/security/login.html.twig,8\9\89d5f9595fc54c90b0c2626c3e5e07e23a679864
+D
+config/services.yaml,8\7\87042d1f46b57381244d70e7a42feeb7710727dc
+j
+:public/uploads/photo/78f453c501ab7e64bc98eaf5f6127f93.webp,6\4\6495887196a51a721ab2b380f9a970fa9818ff37
+I
+src/Form/DocumentType.php,a\f\afdcb1daaeb87abe8430281deb7e32b817c78080
+S
+#src/Controller/ProfilController.php,4\e\4ef337d549caab4ab9a9142639449d73843cfeaa
+X
+(src/Repository/PhotoProfilRepository.php,a\a\aae1dace079d370b127b3f7ca4e45b6260822752
+J
+src/Entity/PhotoProfil.php,6\1\619125eb35c85d71babf3b3d41673d08f298e63e
+F
+src/Form/PhotoType.php,7\0\709a4037d60011f8cdfd8b634fa9a1fea04187e7
+R
+"templates/document/index.html.twig,a\5\a5245b73e8f85dbc9978f91c7c167e06bd6d0d9f

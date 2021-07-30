@@ -13,8 +13,19 @@ class ProfilController extends AbstractController
     #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
     public function index(): Response
     {
+        $user=$this->getUser();
+        $userTel=$user->getTelephone();
+        $userTelLength=count(str_split($userTel));
+        if($userTelLength%2===0){
+            $userTel=wordwrap($userTel,2,' ',true);
+        }else{
+            $userTel=wordwrap($userTel,3,' ',true);
+        }
+
+
+
         return $this->render('profil/index.html.twig', [
-            'controller_name' => 'ProfilController',
+            'telephone' => $userTel,
         ]);
     }
 }

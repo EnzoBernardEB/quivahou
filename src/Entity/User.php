@@ -76,10 +76,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $competence_id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $intitule_document;
 
     /**
      * @ORM\Column(type="string", length=35)
@@ -101,6 +97,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $experience;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="proprietaire")
+     */
+    private $documents;
+
+    /**
+     * @ORM\OneToOne(targetEntity=PhotoProfil::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $photo_profil;
+
+    /**
+     * @ORM\OneToOne(targetEntity=PhotoProfil::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $filename;
+
 
     public function __construct()
     {
@@ -109,6 +122,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->competence_id = new ArrayCollection();
         $this->date_de_naissance= new \DateTime();
         $this->experience = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -324,17 +338,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIntituleDocument(): ?string
-    {
-        return $this->intitule_document;
-    }
-
-    public function setIntituleDocument(?string $intitule_document): self
-    {
-        $this->intitule_document = $intitule_document;
-
-        return $this;
-    }
 
     public function getTelephone(): ?string
     {
@@ -386,6 +389,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $experience->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Document[]
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): self
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents[] = $document;
+            $document->setProprietaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): self
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getProprietaire() === $this) {
+                $document->setProprietaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPhotoProfil(): ?PhotoProfil
+    {
+        return $this->photo_profil;
+    }
+
+    public function setPhotoProfil(PhotoProfil $photo_profil): self
+    {
+        $this->photo_profil = $photo_profil;
+
+        return $this;
+    }
+
+    public function getFilename(): ?PhotoProfil
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(PhotoProfil $filename): self
+    {
+        $this->filename = $filename;
 
         return $this;
     }

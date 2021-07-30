@@ -3,18 +3,35 @@
 {% block title %}Hello DocumentController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="col-span-full grid grid-cols-12">
+        {{ form_start(formAddDocument,{'attr': {'class': 'relative col-span-8 flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+        {{ form_label(formAddDocument.filename,null,{'label_attr': {'class': 'font-bold text-2xl text-center mb-4'}}) }}
+        {{ form_widget(formAddDocument.filename) }}
+        {% for message in app.flashes('ErrorUploadDocument') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('alreadyDocs') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {{ form_end(formAddDocument) }}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/ecf_symfony/src/Controller/DocumentController.php'|file_link(0) }}">src/Controller/DocumentController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/ecf_symfony/templates/document/index.html.twig'|file_link(0) }}">templates/document/index.html.twig</a></code></li>
-    </ul>
-</div>
+
+        {{ form_start(formAddPhoto,{'attr': {'class': 'relative col-span-4 flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+        {{ form_label(formAddPhoto.imageName,null,{'label_attr': {'class': 'font-bold text-2xl text-center mb-4'}}) }}
+        {{ form_widget(formAddPhoto.imageName) }}
+        <div class="absolute bottom-2 right-1.5 rounded-2xl shadow-2xl">
+            <a href="{{ path('app_inscription_fini') }}" class="p-2 underline font-bold border bg-gray-700 text-gray-300">Inscription
+                fini.</a>
+        </div>
+        {% for message in app.flashes('ErrorUploadImage') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('alreadyPhoto') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {{ form_end(formAddPhoto) }}
+
+    </div>
+
 {% endblock %}

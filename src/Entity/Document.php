@@ -36,6 +36,10 @@ class Document
     {
         return $this->filename;
     }
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
 
     public function setFilename(string $filename): self
     {
@@ -48,6 +52,7 @@ class Document
     {
         return $this->proprietaire;
     }
+
 
     public function setProprietaire(?User $proprietaire): self
     {
