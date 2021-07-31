@@ -14,7 +14,6 @@ class InscriptionFiniController extends AbstractController
     {
         $user=$this->getUser();
         $user->setIsCompleted(true);
-        $user->setIsVerified(false);
 
         $entityManager->persist($user);
         $entityManager->flush();

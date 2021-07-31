@@ -57,7 +57,7 @@ class DocumentController extends AbstractController
             $user=$this->getUser();
             $isAlreadyDocument = $user->getDocuments();
             if(count($isAlreadyDocument)>=2) {
-                $this->addFlash('alreadyDocs','Deux documents peuvent êtres enregistré.');
+                $this->addFlash('alreadyDocs','Seulement deux documents peuvent être enregistrés.');
                 $this->redirectToRoute('add_document');
             } else {
                 $document->setProprietaire($user);
