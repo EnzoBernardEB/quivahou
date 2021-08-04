@@ -9,9 +9,6 @@
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-    {% endblock %}
 </head>
 <body class="h-screen">
 <header class="relative flex items-center justify-between p-4 h-24 bg-gray-700 text-gray-300">
@@ -37,5 +34,8 @@
 <main class="grid grid-cols-12 grid-rows-mod bg-gray-600 p-4 h-screen">
     {% block body %}{% endblock %}
 </main>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
 </body>
 </html>

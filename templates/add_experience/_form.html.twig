@@ -1,0 +1,20 @@
+{{ form_start(form,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+        {{ form_label(form.descriptif) }}
+        {{ form_widget(form.descriptif) }}
+        {{ form_label(form.competence_utilise) }}
+        {{ form_widget(form.competence_utilise,{'attr': {'class': 'flex justify-between items-center'}}) }}
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
+        <span class="self-end">
+            <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
+        </span>
+        {% if app.request.get('_route') == 'add_experience' %}
+            {% if app.user.experience.count > 0  %}
+                <div class="mt-10 text-right underline italic"><a href="{{ path('add_document') }}">Suivant</a></div>
+            {% endif %}
+        {% elseif app.user.isCompleted == true %}
+            <div class="mt-10 text-right underline italic"><a href="{{ path('app_profil') }}">Profil</a></div>
+        {% endif %}
+{{ form_end(form) }}

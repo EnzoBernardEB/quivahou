@@ -6,17 +6,15 @@ use App\Entity\Document;
 use App\Entity\PhotoProfil;
 use App\Form\DocumentType;
 use App\Form\PhotoType;
-use App\Repository\PhotoProfilRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use function PHPUnit\Framework\isEmpty;
 
 
 class DocumentController extends AbstractController
@@ -28,7 +26,7 @@ class DocumentController extends AbstractController
      * @return Response
      */
     #[Route('profil/add/document', name: 'add_document')]
-    public function index(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, PhotoProfilRepository $photoProfilRepository): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $document = new Document();
         $formAddDocument = $this->createForm(DocumentType::class,$document);
@@ -85,8 +83,8 @@ class DocumentController extends AbstractController
             $photoProfil= new PhotoProfil();
             $photoProfil->setFilename($fileImage);
 
-            $imageInDB=$photoProfilRepository->findAll();
-            if (count($imageInDB)>0) {
+            $userPhoto=$this->getUser()->getFilename();
+            if ($userPhoto !== null) {
                 $this->addFlash('alreadyPhoto','Une seule photo autorisé.');
                 $this->redirectToRoute('add_document');
             } else {

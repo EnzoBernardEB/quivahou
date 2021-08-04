@@ -99,20 +99,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Document::class, mappedBy="proprietaire")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $documents;
 
     /**
      * @ORM\OneToOne(targetEntity=PhotoProfil::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $photo_profil;
 
     /**
      * @ORM\OneToOne(targetEntity=PhotoProfil::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $filename;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Adress::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $adresse;
 
 
     public function __construct()
@@ -443,6 +450,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFilename(PhotoProfil $filename): self
     {
         $this->filename = $filename;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?Adress
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(Adress $adresse): self
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

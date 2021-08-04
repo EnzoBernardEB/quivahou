@@ -2,7 +2,14 @@
 
 {% block title %}Hello ={% endblock %}
 
+
+
 {% block body %}
+    <style>
+        .ui-tabs .ui-tabs-active {
+            background-color: rgba(107, 114, 128, 1);
+        }
+    </style>
     {% if app.user %}
         {% if app.user.isVerified and app.user.isCompleted is empty %}
         <div class="col-span-full mb-4">
@@ -11,7 +18,7 @@
             {% endfor %}
 
             <div class="m-auto border rounded-2xl p-2 w-9/12 text-2xl text-center text-gray-900 bg-gray-300 underline">
-                <a href="{{ path('add_competence') }}">Veuillez désormais completer votre profil.</a>
+                <a href="{{ path('search_adress') }}">Veuillez désormais completer votre profil.</a>
             </div>
         </div>
 
@@ -28,15 +35,15 @@
                 <div class="detail-individu grid grid-cols-1 gap-4">
                     <div class="adresse">
                         <span class="titre-detail">Adresse</span> <br>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo, sit?
+                        {{ app.user.adresse.housenumber }} {{ app.user.adresse.street }}
                     </div>
                     <div class="postal">
                         <span class="titre-detail">Code Postal</span> <br>
-                        12345
+                        {{ app.user.adresse.postalCode }}
                     </div>
                     <div class="ville">
                         <span class="titre-detail">Ville</span> <br>
-                        Lorem ipsum.
+                        {{ app.user.adresse.city }}
                     </div>
                     <div class="ancienneté">
                         <span class="titre-detail">Date d'anniversaire entreprise</span> <br>
@@ -57,17 +64,50 @@
                 </div>
             </section>
             <section class="details-avance bg-gray-400 p-2 m-2 col-start-4 col-span-9">
-                {{ dump(app.user.filename) }}
-                {% for document in app.user.documents %}
-                    <a href="{{ asset('uploads/document/' ~ document) }}" target="_blank">test</a>
-                    <a href="{{ path('app_view_document',{'id':document.id}) }}">Télécharger</a>
-                {% endfor %}
+
+                <div id="tabs">
+                    <ul>
+                        <li><a href="#tabs-1">Expériences</a></li>
+                        <li><a href="#tabs-2">Compétences</a></li>
+                        <li><a href="#tabs-3">Documents</a></li>
+                    </ul>
+                    <div id="tabs-1" >
+                        <div class="grid grid-cols-4 gap-2 mt-10">
+                            {% for experience in app.user.experience %}
+                                <div class="relative flex flex-col justify-center border shadow-2xl p-2">
+                                    <h2 class="text-center border border-gray-400 shadow-inner p-2 font-bold mb-2 ">{{ experience.nom }}</h2>
+                                    <div class="flex-grow">
+                                        <p class=" mb-2 mr-2"><span class="font-bold">Descriptif : </span>{{ experience.descriptif }}</p>
+                                        <p class="font-bold">Compétences utilisées : </p><ul>
+                                            {% for competence in app.user.competenceId %}
+                                                <li class="inline">{{ competence }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        <span class="font-bold mb-4">Type de mission : </span><p>{{ experience.type }}</p>
+                                        <a href="{{ path('edit_experience', {'id': experience.id}) }}" class="absolute bottom-1.5 right-1.5">Modifier</a>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="tabs-2">
+                        {% for competence in app.user.competenceId %}
+                        {{ competence }}
+                        {% endfor %}
+                    </div>
+                    <div id="tabs-3">
+                        {% for document in app.user.documents %}
+                            <a href="{{ asset('uploads/document/' ~ document) }}" target="_blank">test</a>
+                            <a href="{{ path('app_view_document',{'id':document.id}) }}">Télécharger</a>
+                        {% endfor %}
+                    </div>
+                </div>
 
             </section>
             {% else %}
                 <p class="col-span-full text-4xl text-gray-300">Veuillez confirmez votre adresse email avant de continuer sur Qivahou</p>
         {% endif %}
     {% endif %}
-
-
 {% endblock %}
+

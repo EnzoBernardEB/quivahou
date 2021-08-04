@@ -5,37 +5,26 @@
 {% block body %}
 
     <div class="col-span-full">
-        {{ form_start(formExperience,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
-        {{ form_label(formExperience.nom) }}
-        {{ form_widget(formExperience.nom) }}
-        {{ form_label(formExperience.descriptif) }}
-        {{ form_widget(formExperience.descriptif) }}
-        {{ form_label(formExperience.competence_utilise) }}
-        {{ form_widget(formExperience.competence_utilise,{'attr': {'class': 'flex justify-between items-center'}}) }}
-        {{ form_label(formExperience.type) }}
-        {{ form_widget(formExperience.type) }}
-        <span class="self-end">
-       {{ form_widget(formExperience) }}
-    </span>
-        <div class="mt-10 text-right underline italic"><a href="{{ path('add_document') }}">Suivant</a></div>
-        {{ form_end(formExperience) }}
-        <div class="grid grid-cols-4 gap-4 p-2 mt-4 border rounded-2xl shadow-2xl text-gray-300 bg-gray-900">
-            {% for experience in app.user.experience %}
-                <div class=" border rounded-2xl shadow-2xl p-2 bg-gray-700 flex flex-col">
-                    <p class="text-right">{{ experience.type }}</p>
-                    <p class="text-center font-bold underline">{{ experience.nom }}</p>
-                    <div class="m-auto mt-4">
-                        <p class="text-justify	">{{ experience.descriptif }}</p>
+        {{ include('add_experience/_form.html.twig') }}
+        {% if app.user.experience %}
+            <div class="grid grid-cols-4 gap-4 p-2 mt-4 border rounded-2xl shadow-2xl text-gray-300 bg-gray-900">
+                {% for experience in app.user.experience %}
+                    <div class=" border rounded-2xl shadow-2xl p-2 bg-gray-700 flex flex-col">
+                        <p class="text-right">{{ experience.type }}</p>
+                        <p class="text-center font-bold underline">{{ experience.nom }}</p>
+                        <div class="m-auto mt-4">
+                            <p class="text-justify	">{{ experience.descriptif }}</p>
+                        </div>
+                        <ul class="my-2 grid grid-cols-2 gap-2 break-words	">
+                            {% for competence in experience.competenceUtilise %}
+                                <li class="inline p-2 text-center mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">{{ competence }}</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{{ path('edit_experience', {'id': experience.id}) }}">Modifier</a>
                     </div>
-                    <ul class="my-2 grid grid-cols-2 gap-2 break-words	">
-                        {% for competence in experience.competenceUtilise %}
-                            <li class="inline p-2 text-center mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">{{ competence }}</li>
-                        {% endfor %}
-                    </ul>
 
-                </div>
-
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

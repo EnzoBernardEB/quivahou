@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\AdressRepository;
+use App\Repository\AdressTempRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=AdressRepository::class)
+ * @ORM\Entity(repositoryClass=AdressTempRepository::class)
  */
-class Adress
+class AdressTemp
 {
     /**
      * @ORM\Id
@@ -36,11 +36,6 @@ class Adress
      * @ORM\Column(type="string", length=255)
      */
     private $city;
-
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, mappedBy="adresse", cascade={"persist", "remove"})
-     */
-    private $user;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -96,23 +91,6 @@ class Adress
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        // set the owning side of the relation if necessary
-        if ($user->getAdresse() !== $this) {
-            $user->setAdresse($this);
-        }
-
-        $this->user = $user;
 
         return $this;
     }
