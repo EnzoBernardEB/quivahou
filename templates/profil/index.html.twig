@@ -74,7 +74,7 @@
                     <div id="tabs-1" >
                         <div class="grid grid-cols-4 gap-2 mt-10">
                             {% for experience in app.user.experience %}
-                                <div class="relative flex flex-col justify-center border shadow-2xl p-2">
+                                <div class="relative flex flex-col justify-center border border-gray-900 shadow-2xl p-2">
                                     <h2 class="text-center border border-gray-400 shadow-inner p-2 font-bold mb-2 ">{{ experience.nom }}</h2>
                                     <div class="flex-grow">
                                         <p class=" mb-2 mr-2"><span class="font-bold">Descriptif : </span>{{ experience.descriptif }}</p>
@@ -93,7 +93,9 @@
                     </div>
                     <div id="tabs-2">
                         {% for competence in app.user.competenceId %}
-                        {{ competence }}
+                        <div>
+                            {{ competence }}
+                        </div>
                         {% endfor %}
                     </div>
                     <div id="tabs-3">
