@@ -121,6 +121,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $adresse;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserHasCompetence::class, mappedBy="user")
+     */
+    private $userHasCompetences;
+
 
     public function __construct()
     {
@@ -130,6 +135,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->date_de_naissance= new \DateTime();
         $this->experience = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->userHasCompetences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -462,6 +468,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdresse(Adress $adresse): self
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserHasCompetence[]
+     */
+    public function getUserHasCompetences(): Collection
+    {
+        return $this->userHasCompetences;
+    }
+
+    public function addUserHasCompetence(UserHasCompetence $userHasCompetence): self
+    {
+        if (!$this->userHasCompetences->contains($userHasCompetence)) {
+            $this->userHasCompetences[] = $userHasCompetence;
+            $userHasCompetence->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserHasCompetence(UserHasCompetence $userHasCompetence): self
+    {
+        if ($this->userHasCompetences->removeElement($userHasCompetence)) {
+            // set the owning side to null (unless already changed)
+            if ($userHasCompetence->getUser() === $this) {
+                $userHasCompetence->setUser(null);
+            }
+        }
 
         return $this;
     }

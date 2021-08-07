@@ -6,6 +6,7 @@ use App\Repository\CompetenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
 
 /**
  * @ORM\Entity(repositoryClass=CompetenceRepository::class)
@@ -40,10 +41,16 @@ class Competence
      */
     private $experiences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserHasCompetence::class, mappedBy="competence")
+     */
+    private $userHasCompetences;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->experiences = new ArrayCollection();
+        $this->userHasCompetences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +136,60 @@ class Competence
     {
         if ($this->experiences->removeElement($experience)) {
             $experience->removeCompetenceUtilise($this);
+        }
+
+        return $this;
+    }
+
+    public function getMaitrise(): ?string
+    {
+        return $this->maitrise;
+    }
+
+    public function setMaitrise(string $maitrise): self
+    {
+        $this->maitrise = $maitrise;
+
+        return $this;
+    }
+
+    public function getIsLiked(): ?bool
+    {
+        return $this->isLiked;
+    }
+
+    public function setIsLiked(bool $isLiked): self
+    {
+        $this->isLiked = $isLiked;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserHasCompetence[]
+     */
+    public function getUserHasCompetences(): Collection
+    {
+        return $this->userHasCompetences;
+    }
+
+    public function addUserHasCompetence(UserHasCompetence $userHasCompetence): self
+    {
+        if (!$this->userHasCompetences->contains($userHasCompetence)) {
+            $this->userHasCompetences[] = $userHasCompetence;
+            $userHasCompetence->setCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserHasCompetence(UserHasCompetence $userHasCompetence): self
+    {
+        if ($this->userHasCompetences->removeElement($userHasCompetence)) {
+            // set the owning side to null (unless already changed)
+            if ($userHasCompetence->getCompetence() === $this) {
+                $userHasCompetence->setCompetence(null);
+            }
         }
 
         return $this;
