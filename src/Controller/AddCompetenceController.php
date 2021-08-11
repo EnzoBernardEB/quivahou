@@ -59,7 +59,27 @@ class AddCompetenceController extends AbstractController
 
 
         return $this->render('add_competence/index.html.twig', [
-            'formCompetence' => $formAddCompetence->createView(),
+            'form' => $formAddCompetence->createView(),
+        ]);
+    }
+    #[Route('/profil/edit/competence/{id}', name: 'edit_competence', methods: ['GET', 'POST'])]
+    public function edit(Request $request,EntityManagerInterface $entityManager ,UserHasCompetence $userHasCompetence): Response
+    {
+        $formEditCompetence = $this->createForm(CompetenceUserType::class, $userHasCompetence);
+        $formEditCompetence->handleRequest($request);
+
+        if ($formEditCompetence->isSubmitted() && $formEditCompetence->isValid()) {
+            $entityManager->flush();
+            if($this->getUser()->getIsCompleted() ===true) {
+                return $this->redirectToRoute('app_profil', [], Response::HTTP_SEE_OTHER);
+            }
+            return $this->redirectToRoute('add_competence', [], Response::HTTP_SEE_OTHER);
+
+        }
+
+        return $this->renderForm('add_competence/edit.html.twig', [
+            'competence' => $userHasCompetence,
+            'form' => $formEditCompetence,
         ]);
     }
 }

@@ -64,8 +64,6 @@ class DocumentController extends AbstractController
                 $this->addFlash('success','Document bien enregistré.');
                 $this->redirectToRoute('add_document');
             }
-
-
         }
 
         $formAddPhoto = $this->createForm(PhotoType::class);
@@ -95,14 +93,7 @@ class DocumentController extends AbstractController
                 $this->addFlash('success','La photo est bien enregistré.');
                 $this->redirectToRoute('add_document');
             }
-
-
-
-
-
-
         }
-
 
         return $this->render('document/index.html.twig', [
             'formAddDocument' => $formAddDocument->createView(),

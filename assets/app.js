@@ -17,6 +17,16 @@ require('webpack-jquery-ui');
 require('webpack-jquery-ui/tabs');
 
 global.$ = global.jQuery = $;
+
+// Jquery gestion menu et onglets
 $(function() {
     $( "#tabs" ).tabs();
 } );
+
+$( function() {
+    $( "#menu-profil" ).menu();
+} );
+
+// Add fontawsome
+require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/js/all.js');

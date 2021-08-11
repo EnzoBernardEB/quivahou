@@ -21,10 +21,19 @@ class AddExperienceController extends AbstractController
 
         if($formAddExperience->isSubmitted() && $formAddExperience->isValid()) {
             $experience=$formAddExperience->getData();
-            $user=$this->getUser();
-            $experience->setUser($user);
-            $entityManager->persist($experience);
-            $entityManager->flush();
+            $competenceUsed=$experience->getCompetenceUtilise();
+            $countCompetenceInExp=count($competenceUsed);
+            if($countCompetenceInExp>0) {
+                $user=$this->getUser();
+                $experience->setUser($user);
+                $entityManager->persist($experience);
+                $entityManager->flush();
+                $this->addFlash('successExp','Experience bien enregistrée.');
+
+            } else {
+                $this->addFlash('atLeastOneExp','Veuillez séléctionner au moins une compétence.');
+            }
+
         }
 
 

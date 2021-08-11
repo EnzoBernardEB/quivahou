@@ -72,12 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="users")
-     */
-    private $competence_id;
-
-
-    /**
      * @ORM\Column(type="string", length=35)
      * @Assert\Regex(
      *     pattern="/\d{6,12}/",
@@ -125,6 +119,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=UserHasCompetence::class, mappedBy="user")
      */
     private $userHasCompetences;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAccepted;
 
 
     public function __construct()
@@ -326,31 +325,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Competence[]
-     */
-    public function getCompetenceId(): Collection
-    {
-        return $this->competence_id;
-    }
-
-
-    public function addCompetenceId(Competence $competenceId): self
-    {
-        if (!$this->competence_id->contains($competenceId)) {
-            $this->competence_id[] = $competenceId;
-        }
-
-        return $this;
-    }
-
-    public function removeCompetenceId(Competence $competenceId): self
-    {
-        $this->competence_id->removeElement($competenceId);
-
-        return $this;
-    }
-
 
     public function getTelephone(): ?string
     {
@@ -498,6 +472,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userHasCompetence->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsAccepted(): ?bool
+    {
+        return $this->isAccepted;
+    }
+
+    public function setIsAccepted(bool $isAccepted): self
+    {
+        $this->isAccepted = $isAccepted;
 
         return $this;
     }

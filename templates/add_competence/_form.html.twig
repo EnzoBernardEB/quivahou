@@ -1,0 +1,26 @@
+{{ form_start(form,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+        {{ form_label(form.competence) }}
+        {{ form_widget(form.competence) }}
+        {{ form_label(form.maitrise) }}
+        {{ form_widget(form.maitrise) }}
+        {{ form_label(form.isLiked) }}
+        {{ form_widget(form.isLiked) }}
+        <span class="self-end">
+            <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
+        </span>
+        {% for message in app.flashes('alreadyCompetence') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('successAdd') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+        {% endfor %}
+         {% if app.request.get('_route') == 'add_competence' %}
+             {% if app.user.userHasCompetences.count > 0  %}
+                 <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Suivant</a></div>
+             {% endif %}
+         {% elseif app.user.isCompleted == true %}
+             <div class="mt-10 text-right underline italic"><a href="{{ path('app_profil') }}">Profil</a></div>
+         {% else %}
+             <div class="mt-10 text-right underline italic"><a href="{{ path('add_competence') }}">Retour</a></div>
+         {% endif %}
+{{ form_end(form) }}

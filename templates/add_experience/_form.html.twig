@@ -10,11 +10,19 @@
         <span class="self-end">
             <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
         </span>
+        {% for message in app.flashes('atLeastOneExp') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('successExp') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+        {% endfor %}
         {% if app.request.get('_route') == 'add_experience' %}
             {% if app.user.experience.count > 0  %}
                 <div class="mt-10 text-right underline italic"><a href="{{ path('add_document') }}">Suivant</a></div>
             {% endif %}
         {% elseif app.user.isCompleted == true %}
             <div class="mt-10 text-right underline italic"><a href="{{ path('app_profil') }}">Profil</a></div>
+            {% else %}
+                <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Retour</a></div>
         {% endif %}
 {{ form_end(form) }}

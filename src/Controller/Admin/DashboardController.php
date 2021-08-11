@@ -6,6 +6,7 @@ use App\Entity\Categorie;
 use App\Entity\Competence;
 use App\Entity\TypeMission;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -17,7 +18,13 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        return parent::index();
+        $accounts = $this->getDoctrine()->getRepository(User::class)->count([]);
+        $accountsPendingAccept = $this->getDoctrine()->getRepository(User::class)->findBy(['isAccepted'=>false]);
+
+        return $this->render('Admin/dashboard.html.twig', [
+            'accounts' => $accounts,
+            'accountsPending'=>count($accountsPendingAccept),
+        ]);
     }
 
     public function configureDashboard(): Dashboard
@@ -34,4 +41,5 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Compétence', 'fas fa-clipboard-list ', Competence::class);
         yield MenuItem::linkToCrud('Type experience', 'fas fa-align-justify ', TypeMission::class);
     }
+
 }

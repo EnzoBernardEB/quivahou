@@ -5,42 +5,31 @@
 {% block body %}
 
     <div class="col-span-full">
-        {{ form_start(formCompetence,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
-        {{ form_label(formCompetence.competence) }}
-        {{ form_widget(formCompetence.competence) }}
-        {{ form_label(formCompetence.maitrise) }}
-        {{ form_widget(formCompetence.maitrise) }}
-        {{ form_label(formCompetence.isLiked) }}
-        {{ form_widget(formCompetence.isLiked) }}
-        <span class="self-end">
-       {{ form_widget(formCompetence.Ajouter) }}
-        </span>
-        {% for message in app.flashes('alreadyCompetence') %}
-            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
-        {% endfor %}
-        {% for message in app.flashes('successAdd') %}
-            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
-        {% endfor %}
-        <p class="font-bold underline">Mes compétences :</p>
-        <ul class="grid grid-cols-4 mt-2 ">
 
-            {% for competence in app.user.userHasCompetences %}
-                <li class="p-2  mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">
-                    <div>
-                        <h2 class="text-center font-bold mb-2">{{ competence }}</h2>
-                        <p>
-                            Maitrise : {% if competence.maitrise ==0 %}Débutant{% elseif competence.maitrise ==1 %}Intermédiaire{% else %}Avancé{% endif %}
-                        </p>
-                        <p>
-                            Volonté d'approfondir : {% if competence.isLiked ==true %}Oui{% else %}Non{% endif %}
-                        </p>
-                    </div> </li>
-            {% endfor %}
-        </ul>
-        {% if app.user.competenceId.count > 0 %}
-            <div class="mt-10 text-right underline italic"><a href="{{ path('add_experience') }}">Suivant</a></div>
+        {{ include('add_competence/_form.html.twig') }}
+
+        {% if app.user.userHasCompetences %}
+        <div class=" border rounded-2xl shadow-2xl text-gray-300 bg-gray-900 mt-4">
+            <h2 class="font-bold text-2xl text-center">Mes compétences : </h2>
+            <ul class="grid grid-cols-4 gap-4 p-2 ">
+                {% for competence in app.user.userHasCompetences %}
+                    <li class="border rounded-2xl shadow-2xl p-2 bg-gray-700 flex flex-col">
+                        <div>
+                            <h2 class="text-center font-bold mb-2">{{ competence }}</h2>
+                            <p>
+                                Maitrise : {% if competence.maitrise ==0 %}Débutant{% elseif competence.maitrise ==1 %}Intermédiaire{% else %}Avancé{% endif %}
+                            </p>
+                            <p>
+                                Volonté d'approfondir : {% if competence.isLiked ==true %}Oui{% else %}Non{% endif %}
+                            </p>
+                        </div>
+                        <a href="{{ path('edit_competence', {'id': competence.id}) }}">Modifier</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
         {% endif %}
-        {{ form_end(formCompetence) }}
     </div>
 
 {% endblock %}

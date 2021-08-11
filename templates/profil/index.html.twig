@@ -23,45 +23,58 @@
         </div>
 
         {% elseif app.user.isVerified and app.user.isCompleted %}
-            <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Profil</h1>
-            <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
-                <div class="identite flex flex-col items-center mb-8">
-                    <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain rounded-full">
-                    <div class="flex p-4 text-2xl font-bold">
-                        <p class="mr-4"> {{app.user.prenom}}</p>
-                        <p>{{app.user.nom}}</p>
+            {% if app.user.isAccepted %}
+                <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Collaborateur</h1>
+            {% else %}
+                <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Candidat</h1>
+            {% endif %}
+                <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
+                    <div class="text-right">
+                        <ul id="menu-profil">
+                            <li><div><i class="fas fa-edit"></i></div>
+                                <ul class="bg-gray-900 text-gray-300">
+                                    <li class=""><div>Modifier mes informations</div></li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <div class="detail-individu grid grid-cols-1 gap-4">
-                    <div class="adresse">
-                        <span class="titre-detail">Adresse</span> <br>
-                        {{ app.user.adresse.housenumber }} {{ app.user.adresse.street }}
-                    </div>
-                    <div class="postal">
-                        <span class="titre-detail">Code Postal</span> <br>
-                        {{ app.user.adresse.postalCode }}
-                    </div>
-                    <div class="ville">
-                        <span class="titre-detail">Ville</span> <br>
-                        {{ app.user.adresse.city }}
-                    </div>
-                    <div class="ancienneté">
-                        <span class="titre-detail">Date d'anniversaire entreprise</span> <br>
-                        xx/xx/xxxx
-                    </div>
-                    <div class="telephone">
-                        <span class="titre-detail">Téléphone</span> <br>
-                        <tel>{{ telephone }}</tel>
-                    </div>
-                    <div class="competences-principales">
-                        <span class="titre-detail">Compétences principales</span> <br>
-                        <div class="competences grid grid-cols-3 break-words text-xs text-center gap-2">
-                            {% for competence in app.user.competenceId %}
-                                <div>{{ competence }}</div>
-                            {% endfor %}
+                    <div class="identite flex flex-col items-center mb-8">
+                        <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain rounded-full">
+                        <div class="flex p-4 text-2xl font-bold">
+                            <p class="mr-4"> {{app.user.prenom}}</p>
+                            <p>{{app.user.nom}}</p>
                         </div>
                     </div>
-                </div>
+                    <div class="detail-individu grid grid-cols-1 gap-4">
+                        <div class="adresse">
+                            <span class="titre-detail">Adresse</span> <br>
+                            {{ app.user.adresse.housenumber }} {{ app.user.adresse.street }}
+                        </div>
+                        <div class="postal">
+                            <span class="titre-detail">Code Postal</span> <br>
+                            {{ app.user.adresse.postalCode }}
+                        </div>
+                        <div class="ville">
+                            <span class="titre-detail">Ville</span> <br>
+                            {{ app.user.adresse.city }}
+                        </div>
+                        <div class="ancienneté">
+                            <span class="titre-detail">Date d'anniversaire entreprise</span> <br>
+                            xx/xx/xxxx
+                        </div>
+                        <div class="telephone">
+                            <span class="titre-detail">Téléphone</span> <br>
+                            <tel>{{ telephone }}</tel>
+                        </div>
+                        <div class="competences-principales">
+                            <span class="titre-detail">Compétences principales</span> <br>
+                            <div class="competences grid grid-cols-3 break-words text-xs text-center gap-2">
+                                {% for competence in app.user.userHasCompetences %}
+                                    <div>{{ competence }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
             </section>
             <section class="details-avance bg-gray-400 p-2 m-2 col-start-4 col-span-9">
 
@@ -79,7 +92,7 @@
                                     <div class="flex-grow">
                                         <p class=" mb-2 mr-2"><span class="font-bold">Descriptif : </span>{{ experience.descriptif }}</p>
                                         <p class="font-bold">Compétences utilisées : </p><ul>
-                                            {% for competence in app.user.competenceId %}
+                                            {% for competence in app.user.userHasCompetences %}
                                                 <li class="inline">{{ competence }}</li>
                                             {% endfor %}
                                         </ul>
@@ -92,20 +105,41 @@
                         </div>
                     </div>
                     <div id="tabs-2">
-                        {% for competence in app.user.competenceId %}
-                        <div>
-                            {{ competence }}
-                        </div>
+                        <ul class="grid grid-cols-4 mt-2 ">
+                        {% for competence in app.user.userHasCompetences %}
+                            <div>
+                                <li class="p-2  mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">
+                                    <div>
+                                        <h2 class="text-center font-bold mb-2">{{ competence }}</h2>
+                                        <p>
+                                            Maitrise : {% if competence.maitrise ==0 %}Débutant{% elseif competence.maitrise ==1 %}Intermédiaire{% else %}Avancé{% endif %}
+                                        </p>
+                                        <p>
+                                            Volonté d'approfondir : {% if competence.isLiked ==true %}Oui{% else %}Non{% endif %}
+                                        </p>
+                                    </div>
+                                    <a href="">Modifier</a>
+                                </li>
+                            </div>
                         {% endfor %}
+                        </ul>
                     </div>
                     <div id="tabs-3">
-                        {% for document in app.user.documents %}
-                            <a href="{{ asset('uploads/document/' ~ document) }}" target="_blank">test</a>
-                            <a href="{{ path('app_view_document',{'id':document.id}) }}">Télécharger</a>
-                        {% endfor %}
+                        <div class="flex flex-col">
+                            {% for document in app.user.documents %}
+                                <div class="mb-4">
+                                    <embed src="{{ asset('uploads/document/' ~ document) }}" height="500" width="100%" class="mb-4">
+                                    <a href="{{ asset('uploads/document/' ~ document) }}" target="_blank" class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mb-4">Visualiser sur une autre page</a>
+                                    <a href="{{ path('app_view_document',{'id':document.id}) }}" class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mb-4">Télécharger</a>
+                                </div>
+                            {% endfor %}
+{#                            <div>#}
+{#                                <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain mb-4">#}
+{#                                <a href="" class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mb-4">Modifier</a>#}
+{#                            </div>#}
+                        </div>
                     </div>
                 </div>
-
             </section>
             {% else %}
                 <p class="col-span-full text-4xl text-gray-300">Veuillez confirmez votre adresse email avant de continuer sur Qivahou</p>
