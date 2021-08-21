@@ -14,6 +14,9 @@ class InscriptionFiniController extends AbstractController
     {
         $user=$this->getUser();
         $user->setIsCompleted(true);
+        $roles=$user->getRoles();
+        $roles[]='ROLE_CANDIDAT';
+        $user->setRoles($roles);
 
         $entityManager->persist($user);
         $entityManager->flush();

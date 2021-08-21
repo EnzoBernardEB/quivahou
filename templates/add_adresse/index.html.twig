@@ -6,27 +6,7 @@
 
 
 <div class="col-span-full">
-    {{ form_start(formAdresse,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
-    {{ form_label(formAdresse.adresse) }}
-    {{ form_widget(formAdresse.adresse) }}
-    <span class="self-end">
-   {{ form_widget(formAdresse.Chercher) }}
-    </span>
-    <p class="font-bold underline">Les adresses :</p>
-    <ul class="flex mt-2 flex-col">
-        {% if response is not empty %}
-            {% for adresse in response %}
-                <a href="{{ path('add_adress',{'id':adresse.id })}}">{{ adresse.label }}</a>
-            {% endfor %}
-        {% endif %}
-        {% for message in app.flashes('alreadyAdress') %}
-            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
-        {% endfor %}
-    </ul>
-    {% if app.user.adresse is not null %}
-        <div class="mt-10 text-right underline italic"><a href="{{ path('add_competence') }}">Suivant</a></div>
-    {% endif %}
-    {{ form_end(formAdresse) }}
+    {{ include('add_adresse/_form.html.twig') }}
 </div>
 
 {% endblock %}

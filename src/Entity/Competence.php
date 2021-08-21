@@ -27,12 +27,13 @@ class Competence
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="competences")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $categorie_id;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="competence_id")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $users;
 
@@ -43,6 +44,7 @@ class Competence
 
     /**
      * @ORM\OneToMany(targetEntity=UserHasCompetence::class, mappedBy="competence")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $userHasCompetences;
 

@@ -1,0 +1,17 @@
+{{ form_start(formAddDocument,{'attr': {'class': 'relative col-span-8 flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+        {{ form_label(formAddDocument.filename,null,{'label_attr': {'class': 'font-bold text-2xl text-center mb-4'}}) }}
+        {{ form_widget(formAddDocument.filename) }}
+<span class="self-end">
+            <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
+        </span>
+        <p class="absolute top-1.5 right-1.5 font-bold">{{ docNumber }}/2</p>
+        {% for message in app.flashes('ErrorUploadDocument') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('alreadyDocs') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('ErrorUploadDocument') %}
+            <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+        {% endfor %}
+        {{ form_end(formAddDocument) }}

@@ -14,9 +14,6 @@ class AdressTempType extends AbstractType
     {
         $builder
             ->add('adresse',SearchType::class)
-            ->add('Chercher',SubmitType::class,[
-                'attr' => ['class' => 'p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4']
-            ])
         ;
     }
 

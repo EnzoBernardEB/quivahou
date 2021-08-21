@@ -1,0 +1,25 @@
+{{ form_start(formPhoto,{'attr': {'class': 'relative col-span-4 flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+{% if app.request.get('_route') == 'add_document' %}
+    <h2 class="font-bold text-2xl text-center mb-4">Ajouter une photo de profil</h2>
+{% else %}
+    <h2 class="font-bold text-2xl text-center mb-4">Modifier la photo de profil</h2>
+{% endif %}
+<h2 class="font-bold text-2xl text-center mb-4"></h2>
+{{ form_widget(formPhoto.imageName) }}
+<span class="self-end">
+        <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
+    </span>
+<p class="absolute top-1.5 right-1.5 font-bold">{{ photoNumber }}/1</p>
+{% if app.user.filename.filename is defined and app.user.documents.count == 2 and app.request.get('_route') == 'add_document' %}
+        <div class="rounded-2xl shadow-2xl">
+            <a href="{{ path('app_inscription_fini') }}" class="p-2 underline font-bold border bg-gray-700 text-gray-300">Inscription
+                fini.</a>
+        </div>
+{% endif %}
+{% for message in app.flashes('ErrorUploadImage') %}
+<div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('alreadyPhoto') %}
+<div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+{% endfor %}
+{{ form_end(formPhoto) }}

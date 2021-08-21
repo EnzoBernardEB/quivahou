@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     /**
-     * @ORM\Column(type="string", length=55)
+     * @ORM\Column(type="string", length=255)
      */
     private $prenom;
 
@@ -97,26 +97,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $documents;
 
-    /**
-     * @ORM\OneToOne(targetEntity=PhotoProfil::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $photo_profil;
 
     /**
      * @ORM\OneToOne(targetEntity=PhotoProfil::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $filename;
 
     /**
      * @ORM\OneToOne(targetEntity=Adress::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $adresse;
 
     /**
      * @ORM\OneToMany(targetEntity=UserHasCompetence::class, mappedBy="user")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $userHasCompetences;
 
@@ -125,16 +121,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $isAccepted;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAvailable;
+
+    /**
+     * @ORM\OneToMany(targetEntity=RelationUser::class, mappedBy="user")
+     */
+    private $collegue;
+
+    /**
+     * @ORM\OneToMany(targetEntity=RelationUser::class, mappedBy="requestUser")
+     */
+    private $collegueRequest;
+
 
     public function __construct()
     {
         $this->collegue_id = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->competence_id = new ArrayCollection();
         $this->date_de_naissance= new \DateTime();
         $this->experience = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->userHasCompetences = new ArrayCollection();
+        $this->collegue = new ArrayCollection();
+        $this->collegueRequest = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -410,18 +422,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhotoProfil(): ?PhotoProfil
-    {
-        return $this->photo_profil;
-    }
-
-    public function setPhotoProfil(PhotoProfil $photo_profil): self
-    {
-        $this->photo_profil = $photo_profil;
-
-        return $this;
-    }
-
     public function getFilename(): ?PhotoProfil
     {
         return $this->filename;
@@ -484,6 +484,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsAccepted(bool $isAccepted): self
     {
         $this->isAccepted = $isAccepted;
+
+        return $this;
+    }
+
+    public function getIsAvailable(): ?bool
+    {
+        return $this->isAvailable;
+    }
+
+    public function setIsAvailable(bool $isAvailable): self
+    {
+        $this->isAvailable = $isAvailable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RelationUser[]
+     */
+    public function getCollegue(): Collection
+    {
+        return $this->collegue;
+    }
+
+    public function addCollegue(RelationUser $collegue): self
+    {
+        if (!$this->collegue->contains($collegue)) {
+            $this->collegue[] = $collegue;
+            $collegue->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollegue(RelationUser $collegue): self
+    {
+        if ($this->collegue->removeElement($collegue)) {
+            // set the owning side to null (unless already changed)
+            if ($collegue->getUser() === $this) {
+                $collegue->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RelationUser[]
+     */
+    public function getCollegueRequest(): Collection
+    {
+        return $this->collegueRequest;
+    }
+
+    public function addCollegueRequest(RelationUser $collegueRequest): self
+    {
+        if (!$this->collegueRequest->contains($collegueRequest)) {
+            $this->collegueRequest[] = $collegueRequest;
+            $collegueRequest->setRequestUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCollegueRequest(RelationUser $collegueRequest): self
+    {
+        if ($this->collegueRequest->removeElement($collegueRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($collegueRequest->getRequestUser() === $this) {
+                $collegueRequest->setRequestUser(null);
+            }
+        }
 
         return $this;
     }

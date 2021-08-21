@@ -16,22 +16,18 @@ class PhotoType extends AbstractType
     {
         $builder
             ->add('imageName',FileType::class, [
-                'label'=> 'Ajouter une image de profil',
                 'mapped'=>false,
                 'required'=>false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
+                        'maxSize' => '2048k',
                         'mimeTypes' => [
                             'image/*',
                         ],
-                        'mimeTypesMessage' => 'L\'uploads n\'est pas valide. Vérifier l\'extension et le poids du uploads.',
+                        'mimeTypesMessage' => 'L\'uploads n\'est pas valide. Vérifier l\'extension et le poids de l\'image.',
                     ])
                 ],
 
-            ])
-            ->add('Ajouter',SubmitType::class,[
-                'attr' => ['class' => 'p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4 ']
             ])
         ;
     }

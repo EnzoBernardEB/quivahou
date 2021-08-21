@@ -26,6 +26,7 @@ class Categorie
 
     /**
      * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="categorie_id")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $competences;
 

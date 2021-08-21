@@ -22,19 +22,20 @@ class UserHasCompetenceRepository extends ServiceEntityRepository
     // /**
     //  * @return UserHasCompetence[] Returns an array of UserHasCompetence objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findCompetenceIsLiked($value)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
+            ->andWhere('u.competence = :val')
+            ->andWhere('u.isLiked = 1')
             ->setParameter('val', $value)
             ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+
 
     /*
     public function findOneBySomeField($value): ?UserHasCompetence

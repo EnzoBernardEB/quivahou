@@ -1,0 +1,11 @@
+App\Entity\Categorie:
+  categorie_0:
+    nom: Autre
+  categorie_1:
+    nom: Langage Back-end
+  categorie_2:
+    nom: Langage Front-end
+  categorie_3:
+    nom: Designer
+  categorie_4:
+    nom: Gestion de projet

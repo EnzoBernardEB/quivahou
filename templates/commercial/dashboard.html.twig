@@ -1,0 +1,47 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+    {% block head_stylesheets %}
+        <link rel="stylesheet" href="{{ asset('bundles/easyadmin/app.css') }}">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    {% endblock %}
+
+{% block main %}
+
+    <div class="grid grid-cols-3 gap-4 ">
+        <div class="grid-col-1 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
+            Il y a {{ colab }} collaborateur.
+        </div>
+        <div class="grid-col-2 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
+            Il y a {{ commercial }} commerciaux.
+        </div>
+        <div class="grid-col-3 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
+            Il y a {{ candidat }} candidats.
+        </div>
+        <div class="grid-col-1">
+            <ul>
+                {% for collab in allColab %}
+                    <li><a href="{{ path('view_profil',{'id':collab.id}) }}">{{ collab.prenom }} {{ collab.nom }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="grid-col-2">
+            <ul>
+                {% for commerciaux in allCommercial %}
+                    <li>{{ commerciaux.prenom }} {{ commerciaux.nom }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+        <div class="grid-col-3">
+            <ul>
+                {% for candidat in allCandidat %}
+                    <li><a href="{{ path('view_profil',{'id':candidat.id}) }}">{{ candidat.prenom }} {{ candidat.nom }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="mt-10 text-center border-2 border-green-600 bg-green-300 p-2">
+        <a href="{{ path('search') }}" >Effectuer une recherche</a>
+    </div>
+{% endblock %}

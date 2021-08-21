@@ -1,0 +1,44 @@
+App\Entity\Competence:
+  competence_0:
+    categorie_id: '@categorie_0'
+    nom: Autre
+  competence_1:
+    categorie_id: '@categorie_2'
+    nom: HTML
+  competence_2:
+    categorie_id: '@categorie_2'
+    nom: CSS
+  competence_3:
+    categorie_id: '@categorie_2'
+    nom: Javascript
+  competence_4:
+    categorie_id: '@categorie_1'
+    nom: PHP
+  competence_5:
+    categorie_id: '@categorie_1'
+    nom: MySQL
+  competence_6:
+    categorie_id: '@categorie_1'
+    nom: JAVA
+  competence_7:
+    categorie_id: '@categorie_1'
+    nom: C Sharp
+  competence_8:
+    categorie_id: '@categorie_3'
+    nom: Photoshop
+  competence_9:
+    categorie_id: '@categorie_3'
+    nom: Illustrator
+  competence_10:
+    categorie_id: '@categorie_3'
+    nom: Adobe XD
+  competence_11:
+    categorie_id: '@categorie_4'
+    nom: Trello
+  competence_12:
+    categorie_id: '@categorie_4'
+    nom: Paymo
+  competence_13:
+    categorie_id: '@categorie_4'
+    nom: Wryke
+

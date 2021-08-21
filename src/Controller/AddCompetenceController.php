@@ -74,7 +74,6 @@ class AddCompetenceController extends AbstractController
                 return $this->redirectToRoute('app_profil', [], Response::HTTP_SEE_OTHER);
             }
             return $this->redirectToRoute('add_competence', [], Response::HTTP_SEE_OTHER);
-
         }
 
         return $this->renderForm('add_competence/edit.html.twig', [

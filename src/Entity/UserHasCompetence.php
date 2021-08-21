@@ -30,11 +30,13 @@ class UserHasCompetence
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userHasCompetences")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="userHasCompetences")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $competence;
 

@@ -84,7 +84,6 @@ class AddAdresseController extends AbstractController
         $userAdress->setCity($city);
 
 
-
         $user= $this->getUser();
         if ($user->getAdresse() === null) {
             $user->setAdresse($userAdress);
@@ -101,6 +100,37 @@ class AddAdresseController extends AbstractController
             $entityManager->remove($adress);
             $entityManager->flush();
         }
+        $this->addFlash('successAdress','Adresse bien enregistrée.');
         return $this->redirectToRoute('search_adress');
+    }
+
+    #[Route('profil/edit/adresse/{id}',name: 'edit_adress')]
+    public function EditAdress(EntityManagerInterface $entityManager, AdressTemp $adressTemp, AdressTempRepository $adressTempRepository) {
+        $user= $this->getUser();
+        $userAdress= $user->getAdresse();
+        $label=$adressTemp->getLabel();
+        $housenumber=$adressTemp->getHousenumber();
+        $street=$adressTemp->getStreet();
+        $postalCode=$adressTemp->getPostalCode();
+        $city=$adressTemp->getCity();
+        $userAdress->setLabel($label);
+        $userAdress->setHousenumber($housenumber);
+        $userAdress->setStreet($street);
+        $userAdress->setPostalCode($postalCode);
+        $userAdress->setCity($city);
+
+
+        $entityManager->persist($userAdress);
+        $entityManager->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('successAdressModif',"Adresse bien modifiée.");
+
+        $adresseTemporaire=$adressTempRepository->findAll();
+        foreach ($adresseTemporaire as $adress) {
+            $entityManager->remove($adress);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('edit_profil');
     }
 }

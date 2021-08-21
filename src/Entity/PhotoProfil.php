@@ -24,6 +24,7 @@ class PhotoProfil
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, mappedBy="filename", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $user;
 

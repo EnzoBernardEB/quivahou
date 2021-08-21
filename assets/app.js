@@ -19,9 +19,12 @@ require('webpack-jquery-ui/tabs');
 global.$ = global.jQuery = $;
 
 // Jquery gestion menu et onglets
-$(function() {
-    $( "#tabs" ).tabs();
-} );
+$("#tabs").tabs({
+    active: localStorage.getItem("currentIdx"),
+    activate: function(event, ui) {
+        localStorage.setItem("currentIdx", $(this).tabs('option', 'active'));
+    }
+});
 
 $( function() {
     $( "#menu-profil" ).menu();

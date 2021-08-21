@@ -19,16 +19,21 @@
         <div class="">
             {% if app.user %}
                 <div class="mb-3 flex flex-col justify-center items-end">
-                    <p class="mb-2">Vous êtes connecté en tant que : {{ app.user.prenom }} {{ app.user.nom }}</p>
-                    <a href="{{ path('app_logout') }}" class=" p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Se déconnecter</a>
+                    <p class="mb-2">Vous êtes connecté en tant que : {{ app.user.prenom | capitalize }} {{ app.user.nom | capitalize}}</p>
+                    <ul class="">
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li class="inline"><a href="{{ path('admin') }}" class=" p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Panel admin</a></li>
+                        {% elseif is_granted('ROLE_COMMERCIAL') %}
+                        <li class="inline"><a href="{{ path('commercial') }}" class=" p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Panel commercial</a></li>
+                        {% endif %}
+                        <li class="inline"><a href="{{ path('app_logout') }}" class=" p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Se déconnecter</a></li>
+                    </ul>
                 </div>
                 {% else %}
                     <a href="{{ path('app_register') }}" class=" button-auth mr-6 p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">S'inscrire</a>
                     <a href="{{ path('app_login') }}" class="button-auth p-2 border rounded-2xl hover:bg-gray-300 hover:text-gray-900 hover:underline">Se connecter</a>
             {% endif %}
-
         </div>
-
     {% endblock %}
 </header>
 <main class="grid grid-cols-12 grid-rows-mod bg-gray-600 p-4 h-screen">

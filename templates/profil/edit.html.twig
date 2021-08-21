@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ={% endblock %}
+
+{% block body %}
+<div class=" flex col-span-full row-auto m-auto w-11/12 mt-6 bg-gray-300 p-4 border rounded-2xl">
+    {{ form_start(form,{'attr': {'class': 'flex flex-col w-2/4 text-xl'}}) }}
+    <div class="flex flex-col mb-2">
+
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+    </div>
+    <div class="flex flex-col mb-2">
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom) }}
+
+    </div>
+    <div class="flex flex-col mb-2">
+        {{ form_label(form.telephone) }}
+        {{ form_widget(form.telephone) }}
+        {% for errorItem in form.telephone.vars.errors %}
+            <div class="flex justify-center items-center mt-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
+        {% endfor %}
+
+    </div>
+    <div class="flex flex-col mb-2">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+    </div>
+    <div class="flex flex-col mb-2">
+        {{ form_label(form.dateDeNaissance) }}
+        {{ form_widget(form.dateDeNaissance) }}
+    </div>
+
+    {% for errorItem in form.email.vars.errors %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ errorItem.message }}</div>
+    {% endfor %}
+    <div class="flex justify-end">
+        {{ form_widget(form.mofifier) }}
+    </div>
+    {{ include('add_adresse/_form.html.twig', {'button_label': 'Modifier'}) }}
+    {{ form_end(form) }}
+    <div class="w-2/4 ml-2">
+        <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="déco ou texte" class="m-auto mb-6 object-fill">
+        <div class="col-span-full">
+            {{ include('document/_formPhoto.html.twig', {'button_label': 'Modifier'}) }}
+        </div>
+        <div class="mt-10 text-right underline italic">
+            <a href="{{ path('app_profil') }}">Retour</a>
+        </div>
+    </div>
+
+</div>
+    {% endblock %}

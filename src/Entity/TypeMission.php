@@ -26,6 +26,7 @@ class TypeMission
 
     /**
      * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="type")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $experiences;
 

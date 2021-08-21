@@ -36,7 +36,7 @@ class Experience
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeMission::class, inversedBy="experiences")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $type;
 
@@ -45,6 +45,11 @@ class Experience
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="experiences")
+     */
+    private $entreprise;
 
 
     public function __construct()
@@ -129,6 +134,18 @@ class Experience
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEntreprise(): ?Entreprise
+    {
+        return $this->entreprise;
+    }
+
+    public function setEntreprise(?Entreprise $entreprise): self
+    {
+        $this->entreprise = $entreprise;
 
         return $this;
     }

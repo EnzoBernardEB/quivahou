@@ -33,6 +33,7 @@ class ExperienceType extends AbstractType
             ])
             ->add('type',EntityType::class, [
                 'class'=>TypeMission::class,
+                'required'=>true,
                 'label'=>'Selectionner le type de mission.',
                 'label_attr'=>[
                     'class'=>'text-2xl mb-2 mt-8'

@@ -2,40 +2,90 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\Categorie;
+use App\Entity\Competence;
+use App\Entity\TypeMission;
 use \App\Entity\User;
+use App\Entity\UserHasCompetence;
+use App\Repository\CategorieRepository;
+use App\Repository\CompetenceRepository;
+use App\Repository\ExperienceRepository;
+use App\Repository\TypeMissionRepository;
+use App\Repository\UserHasCompetenceRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityDeletedEvent;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
     private $security;
-    public function __construct(Security $security)
+    private $entityManager;
+    private $categorieRepository;
+    private $userHasCompetenceRepository;
+    private array $competenceOldCategorie=[];
+    private $typeMissionRepository;
+    private array $experienceOldMission=[];
+    private $experienceRepository;
+    public function __construct(Security $security,EntityManagerInterface $entityManager ,CategorieRepository $categorieRepository,TypeMissionRepository $typeMissionRepository ,ExperienceRepository $experienceRepository, UserHasCompetenceRepository $userHasCompetenceRepository)
     {
         $this->security=$security;
+        $this->entityManager=$entityManager;
+        $this->categorieRepository=$categorieRepository;
+        $this->experienceRepository=$experienceRepository;
+        $this->typeMissionRepository=$typeMissionRepository;
+        $this->userHasCompetenceRepository=$userHasCompetenceRepository;
     }
     public static function getSubscribedEvents()
     {
         return [
-            BeforeEntityDeletedEvent::class=>['checkIfAdmin']
+            BeforeEntityDeletedEvent::class=>['checkBeforeSup'],
+            AfterEntityDeletedEvent::class=>['addDefaultValue'],
         ];
     }
-    public function checkIfAdmin (BeforeEntityDeletedEvent $event)
+    public function checkBeforeSup (BeforeEntityDeletedEvent $event)
     {
         $entity = $event->getEntityInstance();
         $user = $this->security->getUser();
         $role=$user->getRoles();
+        $defaultCategorie=$this->categorieRepository->findOneBy(['nom'=>'Autre']);
+        $defaultMission=$this->typeMissionRepository->findOneBy(['intitule'=>'Autre']);
 
-        if(!($entity instanceof User)) {
+        if(!($entity instanceof User) && !($entity instanceof Categorie) && !($entity instanceof TypeMission)) {
             return;
-        } elseif ($user->getUserIdentifier()===$entity->getUserIdentifier() ) {
+        } elseif ($entity===$user && $user->getUserIdentifier()===$entity->getUserIdentifier() ) {
             throw new \Exception('Vous ne pouvez pas vous supprimer vous même');
+        } elseif ($entity===$defaultCategorie || $entity===$defaultMission ) {
+            throw new \Exception('Vous ne pouvez pas supprimer les valeurs par défaut.');
+        } elseif ($entity instanceof Categorie && $entity !== $defaultCategorie ) {
+            $this->competenceOldCategorie=$this->competenceRepository->findBy(['categorie_id'=>$entity->getId()]);
+        } elseif ($entity instanceof TypeMission && $entity!==$defaultMission) {
+            $this->experienceOldMission=$this->experienceRepository->findBy(['type'=>$entity->getId()]);
         }
         //si on veut empecher en plus de supprimer les admins
 //        elseif (in_array("ROLE_ADMIN",$role) || $user->getUserIdentifier()===$entity->getUserIdentifier() ) {
 //            throw new \Exception('Vous ne pouvez pas vous supprimer en tant qu\'admin');
 //        }
-
-
+    }
+    public function addDefaultValue(AfterEntityDeletedEvent $event)
+    {
+        $entity = $event->getEntityInstance();
+        if($entity instanceof Categorie) {
+            $defaultCategorie=$this->categorieRepository->findOneBy(['nom'=>'Autre']);
+            foreach($this->competenceOldCategorie as $competence) {
+                $competence->setCategorieId($defaultCategorie);
+                $this->entityManager->persist($competence);
+            }
+            $this->entityManager->flush();
+        } elseif ($entity instanceof TypeMission) {
+            $defaultMission=$this->typeMissionRepository->findOneBy(['intitule'=>'Autre']);
+            foreach ($this->experienceOldMission as $experience) {
+                $experience->setType($defaultMission);
+                $this->entityManager->persist($experience);
+            }
+            $this->entityManager->flush();
+        }
     }
 }

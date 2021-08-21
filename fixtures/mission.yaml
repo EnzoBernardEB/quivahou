@@ -1,0 +1,7 @@
+App\Entity\TypeMission:
+  mission_0:
+    intitule: Autre
+  mission_1:
+    intitule: Mission Quivahou
+  mission_2:
+    intitule: Mission externe

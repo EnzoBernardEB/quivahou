@@ -1,0 +1,33 @@
+{{ form_start(formAdresse,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+    {{ form_label(formAdresse.adresse) }}
+    {{ form_widget(formAdresse.adresse) }}
+<span class="self-end">
+    <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Rechercher') }}</button>
+</span>
+<p class="font-bold underline">Les adresses :</p>
+<ul class="flex mt-2 flex-col">
+    {% if response is not empty %}
+        {% for adresse in response %}
+            {% if app.request.get('_route') == 'edit_profil' %}
+                <a href="{{ path('edit_adress',{'id':adresse.id })}}">{{ adresse.label }}</a>
+            {% else %}
+                <a href="{{ path('add_adress',{'id':adresse.id })}}">{{ adresse.label }}</a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% for message in app.flashes('alreadyAdress') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('successAdress') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('successAdressModif') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% if app.user.adresse is not null %}
+    {% if app.request.get('_route') == 'search_adress' %}
+        <div class="mt-10 text-right underline italic"><a href="{{ path('add_competence') }}">Suivant</a></div>
+    {% endif %}
+{% endif %}
+    {{ form_end(formAdresse) }}

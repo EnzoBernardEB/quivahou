@@ -3,5 +3,12 @@
 
 {% block main %}
     Il y à {{ accounts }} {{ accounts > 1 ? 'comptes' : 'compte' }}  . <br>
-    {{ accountsPending }} {{ accountsPending > 1 ? 'comptes ne sont pas encore validés.' : 'compte n\'est pas encore validé.' }}
+    {% if accountsPending > 1 %}
+        <p>{{ accountsPending }} comptes ne sont pas encore validés.</p>
+    {% elseif accountsPending == 1 %}
+        <p>{{ accountsPending }} compte à valider.</p>
+    {% else %}
+     <p>Aucun compte à valider.</p>
+    {% endif %}
+    <a href="{{ path('app_profil') }}">Retour sur profil</a>
 {% endblock %}

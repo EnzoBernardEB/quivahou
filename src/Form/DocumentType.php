@@ -26,13 +26,9 @@ class DocumentType extends AbstractType
                             'application/pdf',
                             'application/x-pdf',
                         ],
-                        'mimeTypesMessage' => 'L\' uploads n\'est pas valide. Vérifier l\'extension et le poids du uploads.',
+                        'mimeTypesMessage' => 'L\' uploads n\'est pas valide. Vérifier l\'extension et le poids de l\'uploads.',
                     ])
                 ],
-
-            ])
-            ->add('Ajouter',SubmitType::class,[
-                'attr' => ['class' => 'p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4']
             ])
         ;
     }

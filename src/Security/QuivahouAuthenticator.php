@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +28,15 @@ class QuivahouAuthenticator extends AbstractLoginFormAuthenticator
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
+
     }
 
     public function authenticate(Request $request): PassportInterface
     {
         $email = $request->request->get('email', '');
-
         $request->getSession()->set(Security::LAST_USERNAME, $email);
+
+
 
         return new Passport(
             new UserBadge($email),
@@ -44,13 +47,21 @@ class QuivahouAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request,TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+        $userRole=$token->getUser()->getRoles();
+        $admin='ROLE_ADMIN';
+        $commercial='ROLE_COMMERCIAL';
+        if (in_array($admin,$userRole)) {
+            return new RedirectResponse($this->urlGenerator->generate('admin'));
+        } elseif(in_array($commercial,$userRole)) {
+            return new RedirectResponse($this->urlGenerator->generate('commercial'));
+        } else {
+            if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+                return new RedirectResponse($targetPath);
+            }
+            return new RedirectResponse($this->urlGenerator->generate('app_profil'));
         }
-
-        return new RedirectResponse($this->urlGenerator->generate('app_profil'));
     }
 
     protected function getLoginUrl(Request $request): string
