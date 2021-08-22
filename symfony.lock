@@ -112,9 +112,9 @@
             "ref": "71822522faf7ed2792d86b7f94ce73443358ccb9"
         },
         "files": [
-            "config/packages/dev/hautelook_alice.yaml",
-            "config/packages/test/hautelook_alice.yaml",
-            "fixtures/.gitignore"
+            "./config/packages/dev/hautelook_alice.yaml",
+            "./config/packages/test/hautelook_alice.yaml",
+            "./fixtures/.gitignore"
         ]
     },
     "laminas/laminas-code": {
@@ -135,8 +135,8 @@
             "ref": "0b9900ece737bec7752e4155c0164639dd9b0cb0"
         },
         "files": [
-            "config/packages/dev/nelmio_alice.yaml",
-            "config/packages/test/nelmio_alice.yaml"
+            "./config/packages/dev/nelmio_alice.yaml",
+            "./config/packages/test/nelmio_alice.yaml"
         ]
     },
     "nikic/php-parser": {

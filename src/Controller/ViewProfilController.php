@@ -6,15 +6,23 @@ use App\Entity\Experience;
 use App\Entity\RelationUser;
 use App\Entity\User;
 use App\Form\ExperienceType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ViewProfilController extends AbstractController
 {
+    private RelationUser $relationUser;
+
+    public function __construct(RelationUser $relationUser)
+    {
+        $this->relationUser = $relationUser;
+    }
+
     #[Route('/view/profil/{id}', name: 'view_profil')]
     public function index(User $user): Response
     {
@@ -45,8 +53,6 @@ class ViewProfilController extends AbstractController
             }
 
         }
-
-
         return $this->render('add_experience/index.html.twig', [
             'form' => $formAddExperience->createView(),
             'userProfil'=>$user,
@@ -54,22 +60,20 @@ class ViewProfilController extends AbstractController
     }
 
     #[Route('/send/relRequest/{id}', name: 'sendRelRequest')]
-    public function requestRelation(User $user, RelationUser $relationUser, EntityManagerInterface $entityManager, Request $request)
+    #[ParamConverter('user', class: 'App\Entity\RelationUser')]
+
+    public function requestRelation(User $user, UserRepository $userRepository ,EntityManagerInterface $entityManager)
     {
-        dd($user);
         $userLogged=$this->getUser();
-        $relationUser->setUser($userLogged);
-        $relationUser->setRequestUser($user);
-        $relationUser->setPending(true);
-        $relationUser->setIsAccepted(false);
-        $entityManager->persist($relationUser);
+        $userID=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
+        $this->relationUser->setUser($userID);
+        $this->relationUser->setRequestUser($user);
+        $entityManager->persist($this->relationUser);
+
         $entityManager->flush();
 
-        $locale = $request->get('_locale');
-        $this->get('session')->set('_locale', $locale);
-        $referer = $request->headers->get('referer');
 
-        return new RedirectResponse($referer);
+        return $this->redirectToRoute('app_profil');
 
     }
 

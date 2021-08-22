@@ -35,13 +35,13 @@ class SearchController extends AbstractController
                     $competence=$competenceRepository->findOneBy(['nom'=>$query]);
                     $userhas=$userHasCompetenceRepository->findBy(['competence'=>$competence]);
                     foreach ($userhas as $user){
-                        $resultToDisplay=$user->getUser();
+                        $resultToDisplay[]=$user->getUser();
                     }
                     break;
                 case 'collab':
                     $result=$userRepository->findCollab($query);
                     if(!empty($result)) {
-                        $resultToDisplay=$result;
+                        $resultToDisplay[]=$result;
                     }
 
                     break;
@@ -49,7 +49,7 @@ class SearchController extends AbstractController
                     $competence=$competenceRepository->findOneBy(['nom'=>$query]);
                     $userLike=$userHasCompetenceRepository->findCompetenceIsLiked($competence);
                     foreach ($userLike as $user){
-                        $resultToDisplay=$user->getUser();
+                        $resultToDisplay[]=$user->getUser();
                     }
                     break;
                 case 'niveau':
@@ -57,11 +57,11 @@ class SearchController extends AbstractController
                     $userhas=$userHasCompetenceRepository->findBy(['competence'=>$competence]);
                     foreach ($userhas as $user){
                         if ($user->getMaitrise()===2) {
-                            $competenceHigh=$user->getUser();
+                            $competenceHigh[]=$user->getUser();
                         } elseif ($user->getMaitrise()===1) {
-                            $competenceMedium=$user->getUser();
+                            $competenceMedium[]=$user->getUser();
                         }else {
-                            $competenceLow=$user->getUser();
+                            $competenceLow[]=$user->getUser();
                         }
                     }
 

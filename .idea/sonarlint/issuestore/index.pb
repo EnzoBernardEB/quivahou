@@ -15,8 +15,6 @@ I
 package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
 B
 tailwind.config.js,0\9\0918cbb76f2c44f223706cec9d31a32cd1177ce4
-H
-templates/base.html.twig,f\f\ffb3f1cfd73fdec1f0c80c63d0b5bbc1fff22022
 V
 &src/Security/QuivahouAuthenticator.php,d\f\dffb9cfce7dc38ac8e76fe77a9358a2227798ab2
 N
@@ -63,8 +61,6 @@ I
 src/Entity/Experience.php,a\0\a0eba14d002e101212ca982a41a6aba63fe93001
 N
 config/packages/validator.yaml,d\8\d87ace3c9cf646c28e05e6aac383e4fc147f0b74
-K
-src/Form/CompetenceType.php,1\1\1103ab8057fa405c22f69df27219d3fe5bd92757
 X
 (templates/add_competence/index.html.twig,2\a\2a1b01c5a6874e6743bb4b904ef423b1bbad6430
 \
@@ -73,14 +69,8 @@ G
 src/Entity/Document.php,2\2\222a95a51abea5e03d0c982b9dc7576e49f39e88
 R
 "templates/security/login.html.twig,8\9\89d5f9595fc54c90b0c2626c3e5e07e23a679864
-D
-config/services.yaml,8\7\87042d1f46b57381244d70e7a42feeb7710727dc
-j
-:public/uploads/photo/78f453c501ab7e64bc98eaf5f6127f93.webp,6\4\6495887196a51a721ab2b380f9a970fa9818ff37
 I
 src/Form/DocumentType.php,a\f\afdcb1daaeb87abe8430281deb7e32b817c78080
-S
-#src/Controller/ProfilController.php,4\e\4ef337d549caab4ab9a9142639449d73843cfeaa
 X
 (src/Repository/PhotoProfilRepository.php,a\a\aae1dace079d370b127b3f7ca4e45b6260822752
 J

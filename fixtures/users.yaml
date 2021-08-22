@@ -1,9 +1,9 @@
 App\Entity\PhotoProfil:
-  photoprofil{1..51}:
+  photoprofil{1..56}:
     filename: <numberBetween(0, 10000)>
 
 App\Entity\Adress:
-  address{1..51}:
+  address{1..56}:
     housenumber: <numberBetween(1, 200)>
     street: <sentence()>
     postal_code: <numberBetween(970, 10000)>
@@ -20,13 +20,83 @@ App\Entity\User:
     roles: [ROLE_ADMIN]
     email: admin@quivahou.net
     date_de_naissance: <(new DateTime("1980-10-10"))>
-    password: <hashPassword('testtttt')>
+    password:  testtttt
     telephone: <fr_FR:phoneNumber()>
     isVerified: true
     isCompleted: true
     isAccepted: true
     is_available: true
-  user_{1..50}:
+  user_1:
+    filename (unique): '@photoprofil*'
+    adresse (unique): '@address*'
+    prenom: <firstname()>
+    nom: <lastname()>
+    roles: [ ROLE_COMMERCIAL ]
+    email: commercial1@quivahou.net
+    date_de_naissance: <(new DateTime("1980-10-10"))>
+    password:  testtttt
+    telephone: <fr_FR:phoneNumber()>
+    isVerified: true
+    isCompleted: true
+    isAccepted: true
+    is_available: true
+  user_2:
+    filename (unique): '@photoprofil*'
+    adresse (unique): '@address*'
+    prenom: <firstname()>
+    nom: <lastname()>
+    roles: [ ROLE_COMMERCIAL ]
+    email: commercial2@quivahou.net
+    date_de_naissance: <(new DateTime("1980-10-10"))>
+    password:  testtttt
+    telephone: <fr_FR:phoneNumber()>
+    isVerified: true
+    isCompleted: true
+    isAccepted: true
+    is_available: true
+  user_3:
+    filename (unique): '@photoprofil*'
+    adresse (unique): '@address*'
+    prenom: <firstname()>
+    nom: <lastname()>
+    roles: [ ROLE_COMMERCIAL ]
+    email: commercial3@quivahou.net
+    date_de_naissance: <(new DateTime("1980-10-10"))>
+    password:  testtttt
+    telephone: <fr_FR:phoneNumber()>
+    isVerified: true
+    isCompleted: true
+    isAccepted: true
+    is_available: true
+  user_4:
+    filename (unique): '@photoprofil*'
+    adresse (unique): '@address*'
+    prenom: <firstname()>
+    nom: <lastname()>
+    roles: [ ROLE_COMMERCIAL ]
+    email: commercial4@quivahou.net
+    date_de_naissance: <(new DateTime("1980-10-10"))>
+    password: testtttt
+    telephone: <fr_FR:phoneNumber()>
+    isVerified: true
+    isCompleted: true
+    isAccepted: true
+    is_available: true
+  user_5:
+    filename (unique): '@photoprofil*'
+    adresse (unique): '@address*'
+    prenom: <firstname()>
+    nom: <lastname()>
+    roles: [ ROLE_COMMERCIAL ]
+    email: commercial5@quivahou.net
+    date_de_naissance: <(new DateTime("1980-10-10"))>
+    password:  testtttt
+    telephone: <fr_FR:phoneNumber()>
+    isVerified: true
+    isCompleted: true
+    isAccepted: true
+    is_available: true
+  user_{6..50}:
     filename (unique): '@photoprofil*'
     adresse (unique): '@address*'
     prenom: <firstname()>
@@ -34,9 +104,9 @@ App\Entity\User:
     roles: [ROLE_COLLABORATEUR]
     email: '<email()>'
     date_de_naissance: <(new DateTime("1980-10-10"))>
-    password: <hashPassword('testtttt')>
+    password:  < hashPassword('testtttt') >
     telephone: <phoneNumber()>
     isVerified: true
     isCompleted: true
-    isAccepted: true
-    is_available: true
+    isAccepted: <boolean(85)>
+    is_available: <boolean(75)>

@@ -1,24 +1,22 @@
 <?php
+
 namespace App\AppBundle\DataFixtures\Faker\Provider;
 
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-
 class HashPasswordProvider
 {
-    /**
-     * @var UserPasswordHasherInterface
-     */
-    private UserPasswordHasherInterface $encoder;
+    private UserPasswordHasherInterface $hasher;
+
     public function __construct(UserPasswordHasherInterface $hasher)
     {
-        $this->encoder = $hasher;
+        $this->hasher = $hasher;
     }
 
     public function hashPassword(string $plainPassword): string
     {
-        return $this->encoder->hashPassword(new User(), $plainPassword);
+        return $this->hasher->hashPassword(new User(),$plainPassword);
     }
 
 }
