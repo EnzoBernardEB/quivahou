@@ -16,13 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ViewProfilController extends AbstractController
 {
-    private RelationUser $relationUser;
-
-    public function __construct(RelationUser $relationUser)
-    {
-        $this->relationUser = $relationUser;
-    }
-
     #[Route('/view/profil/{id}', name: 'view_profil')]
     public function index(User $user): Response
     {
@@ -60,18 +53,19 @@ class ViewProfilController extends AbstractController
     }
 
     #[Route('/send/relRequest/{id}', name: 'sendRelRequest')]
-    #[ParamConverter('user', class: 'App\Entity\RelationUser')]
+    #[ParamConverter('user', class: User::class)]
 
-    public function requestRelation(User $user, UserRepository $userRepository ,EntityManagerInterface $entityManager)
+    public function requestRelation(User $user,UserRepository $userRepository ,EntityManagerInterface $entityManager)
     {
         $userLogged=$this->getUser();
-        $userID=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
-        $this->relationUser->setUser($userID);
-        $this->relationUser->setRequestUser($user);
-        $entityManager->persist($this->relationUser);
-
+        $userActif=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
+        $relationUser=new RelationUser();
+        $relationUser->setUser($userActif);
+        $relationUser->setRequestUser($user);
+        $relationUser->setIsAccepted(false);
+        $relationUser->setPending(true);
+        $entityManager->persist($relationUser);
         $entityManager->flush();
-
 
         return $this->redirectToRoute('app_profil');
 

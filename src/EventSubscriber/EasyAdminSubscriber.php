@@ -28,14 +28,16 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     private array $competenceOldCategorie=[];
     private $typeMissionRepository;
     private array $experienceOldMission=[];
+    private $competenceRepository;
     private $experienceRepository;
-    public function __construct(Security $security,EntityManagerInterface $entityManager ,CategorieRepository $categorieRepository,TypeMissionRepository $typeMissionRepository ,ExperienceRepository $experienceRepository, UserHasCompetenceRepository $userHasCompetenceRepository)
+    public function __construct(Security $security,EntityManagerInterface $entityManager ,CompetenceRepository $competenceRepository ,CategorieRepository $categorieRepository ,TypeMissionRepository $typeMissionRepository ,ExperienceRepository $experienceRepository, UserHasCompetenceRepository $userHasCompetenceRepository)
     {
         $this->security=$security;
         $this->entityManager=$entityManager;
         $this->categorieRepository=$categorieRepository;
         $this->experienceRepository=$experienceRepository;
         $this->typeMissionRepository=$typeMissionRepository;
+        $this->competenceRepository=$competenceRepository;
         $this->userHasCompetenceRepository=$userHasCompetenceRepository;
     }
     public static function getSubscribedEvents()

@@ -24,7 +24,7 @@
     "dependencies": {
         "jquery": "^3.6.0",
         "jquery-ui": "^1.12.1",
-        "maildev": "^0.5.1",
+        "maildev": "^1.1.0",
         "tabs": "^0.2.0",
         "webpack-jquery-ui": "^2.0.1"
     }

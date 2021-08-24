@@ -38,8 +38,8 @@
     <div class="flex justify-end">
         {{ form_widget(form.mofifier) }}
     </div>
-    {{ include('add_adresse/_form.html.twig', {'button_label': 'Modifier'}) }}
     {{ form_end(form) }}
+
     <div class="w-2/4 ml-2">
         <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="déco ou texte" class="m-auto mb-6 object-fill">
         <div class="col-span-full">
@@ -49,6 +49,6 @@
             <a href="{{ path('app_profil') }}">Retour</a>
         </div>
     </div>
-
+    {{ include('add_adresse/_form.html.twig', {'button_label': 'Rechercher'}) }}
 </div>
     {% endblock %}

@@ -20,7 +20,7 @@ App\Entity\User:
     roles: [ROLE_ADMIN]
     email: admin@quivahou.net
     date_de_naissance: <(new DateTime("1980-10-10"))>
-    password:  testtttt
+    password: testtttt
     telephone: <fr_FR:phoneNumber()>
     isVerified: true
     isCompleted: true

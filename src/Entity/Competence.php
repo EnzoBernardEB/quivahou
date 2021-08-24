@@ -27,7 +27,7 @@ class Competence
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="competences")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $categorie_id;
 
