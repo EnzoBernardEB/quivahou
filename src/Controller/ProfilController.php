@@ -137,6 +137,7 @@ class ProfilController extends AbstractController
         //Photo modification
         $photo= $user->getFilename()->getId();
 
+        $photoNumber=count($photoProfilRepository->findBy(['user'=>$this->getUser()]));
         $oldPhoto=$photoProfilRepository->findOneBy(['id'=>$photo]);
         $oldName=$oldPhoto->getFilename();
 
@@ -211,7 +212,7 @@ class ProfilController extends AbstractController
             'formPhoto'=>$formEditPhoto,
             'formAdresse'=>$formEditAdress,
             'response'=>$adressChoice,
-
+            'photoNumber'=>$photoNumber
         ]);
     }
 }

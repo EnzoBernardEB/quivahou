@@ -61,11 +61,16 @@ class ViewProfilController extends AbstractController
     }
 
     #[Route('/send/relRequest/{id}', name: 'sendRelRequest')]
+<<<<<<< HEAD
     #[ParamConverter('id', class: User::class)]
+=======
+    #[ParamConverter('user', class: User::class)]
+>>>>>>> 08e296e065f58a0f39e2a2602d55cfcacdb50d60
 
     public function requestRelation(User $user,UserRepository $userRepository ,EntityManagerInterface $entityManager)
     {
         $userLogged=$this->getUser();
+<<<<<<< HEAD
         $userID=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
         $relationUser = new RelationUser();
         $relationUser->setUser($userID);
@@ -79,6 +84,18 @@ class ViewProfilController extends AbstractController
 
 
         return $this->redirect('/view/profil/'.$user->getId());
+=======
+        $userActif=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
+        $relationUser=new RelationUser();
+        $relationUser->setUser($userActif);
+        $relationUser->setRequestUser($user);
+        $relationUser->setIsAccepted(false);
+        $relationUser->setPending(true);
+        $entityManager->persist($relationUser);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_profil');
+>>>>>>> 08e296e065f58a0f39e2a2602d55cfcacdb50d60
 
     }
 
