@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\AdressTemp;
+use App\Entity\RelationUser;
+use App\Entity\User;
 use App\Form\AdressTempType;
 use App\Form\PhotoType;
 use App\Form\SearchCollabType;
@@ -11,6 +13,7 @@ use App\Kernel;
 use App\Repository\AdressRepository;
 use App\Repository\AdressTempRepository;
 use App\Repository\PhotoProfilRepository;
+use App\Repository\RelationUserRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -26,7 +29,7 @@ class ProfilController extends AbstractController
 {
     #[Route('/', name: 'app_profil')]
     #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
-    public function index(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository): Response
+    public function index(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository, RelationUserRepository $relationUserRepository): Response
     {
 
         $user=$this->getUser();
@@ -57,13 +60,67 @@ class ProfilController extends AbstractController
             $query=$searchCollab->get('query')->getData();
             $result=$userRepository->findCollab($query);
         }
+        $relRequestPending = $relationUserRepository->getMyPendingRelRequest($user->getId());
+        $relRequestSend = $relationUserRepository->getRelRequest($user->getId());
+        $userCollegue = $relationUserRepository->myCollegue($user->getId());
+        $myRequest=[];
+        foreach ($relRequestSend as $req) {
+            $myRequest[]=$req->getRequestUser();
+        }
+        $requestToValidate=[];
+        foreach ($relRequestPending as $req) {
+            $requestToValidate[]= $req->getUser();
+        }
+        $myCollegue=[];
+        foreach ($userCollegue as $req) {
+            $myCollegue[]= $req->getRequestUser();
+        }
+
+
 
         return $this->render('profil/index.html.twig', [
             'telephone' => $userTel,
             'form'=>$searchCollab->createView(),
-            'result'=>$result
+            'result'=>$result,
+            'relPending'=>$requestToValidate,
+            'relSend'=>$myRequest,
+            'collegue'=>$myCollegue,
+
         ]);
     }
+
+    #[Route('/relRequest/accept/{id}', name: 'accept_request', methods: ['GET', 'POST'])]
+    public function acceptRequest(User $user, RelationUserRepository $relationUserRepository, EntityManagerInterface $entityManager)
+    {
+        $relationUser=$relationUserRepository->acceptRequest($user->getId(),$this->getUser()->getId());
+        $UserRelRequest = $relationUserRepository->getRelRequest($user->getId());
+        $requestId=[];
+        foreach ($UserRelRequest as $requestUserDid) {
+            $requestId[]=$requestUserDid->getRequestUser()->getId();
+        }
+        if (in_array($this->getUser()->getId(), $requestId, true)){
+            $relationUserRequest=$relationUserRepository->acceptRequest($this->getUser()->getId(),$user->getId());
+            foreach ($relationUserRequest as $userRel) {
+                $userRel->setIsAccepted(true);
+                $userRel->setPending(false);
+                $userRel->setIsDeny(false);
+                $entityManager->persist($userRel);
+            }
+        }
+
+        foreach ($relationUser as $relation) {
+            $relation->setIsAccepted(true);
+            $relation->setPending(false);
+            $relation->setIsDeny(false);
+            $entityManager->persist($relation);
+        }
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_profil');
+    }
+
+
+
     #[Route('/profil/edit/profil', name: 'edit_profil', methods: ['GET', 'POST'])]
     public function editUser(Request $request,EntityManagerInterface $entityManager, PhotoProfilRepository $photoProfilRepository, Filesystem $filesystem, Kernel $kernel, AdressRepository $adressRepository,AdressTempRepository $adressTempRepository ,HttpClientInterface $client):Response
     {
@@ -148,11 +205,12 @@ class ProfilController extends AbstractController
         }
         $adressChoice=$adressTempRepository->findAll();
 
+
         return $this->renderForm('profil/edit.html.twig',[
             'form'=>$formEditUser,
             'formPhoto'=>$formEditPhoto,
             'formAdresse'=>$formEditAdress,
-            'response'=>$adressChoice
+            'response'=>$adressChoice,
 
         ]);
     }

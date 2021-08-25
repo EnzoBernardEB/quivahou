@@ -19,22 +19,74 @@ class RelationUserRepository extends ServiceEntityRepository
         parent::__construct($registry, RelationUser::class);
     }
 
-    // /**
+
     //  * @return RelationUser[] Returns an array of RelationUser objects
     //  */
-    /*
-    public function findByExampleField($value)
+    public function getMyPendingRelRequest($userID,)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('r.requestUser = :val')
+            ->andWhere('r.pending = true')
+            ->andWhere('r.isAccepted = false')
+            ->andWhere('r.isDeny = false')
+            ->setParameter('val', $userID)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    public function getRelRequest($userID)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :val')
+            ->andWhere('r.pending = true')
+            ->andWhere('r.isAccepted = false')
+            ->andWhere('r.isDeny = false')
+            ->setParameter('val', $userID)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function myCollegue($userID)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :val ')
+            ->andWhere('r.pending = false')
+            ->andWhere('r.isAccepted = true')
+            ->andWhere('r.isDeny = false')
+            ->setParameter('val', $userID)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function acceptRequest($userID,$myID)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :myID')
+            ->andWhere('r.requestUser = :hisID')
+            ->andWhere('r.pending = true')
+            ->andWhere('r.isAccepted = false')
+            ->andWhere('r.isDeny = false')
+            ->setParameter('myID', $myID)
+            ->setParameter('hisID', $userID)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function canSee($userID)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :val or r.requestUser = :val')
+            ->andWhere('r.pending = false')
+            ->andWhere('r.isAccepted = true')
+            ->andWhere('r.isDeny = false')
+            ->setParameter('val', $userID)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
 
     /*
     public function findOneBySomeField($value): ?RelationUser

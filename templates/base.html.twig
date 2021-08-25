@@ -36,7 +36,7 @@
         </div>
     {% endblock %}
 </header>
-<main class="grid grid-cols-12 grid-rows-mod bg-gray-600 p-4 h-screen">
+<main class="grid grid-cols-12 bg-gray-600 p-4 h-screen grid-row {{ app.request.uri == 'http://127.0.0.1:8000/' ? 'grid-rows-mod' : 'grid-row-modView'  }}">
     {% block body %}{% endblock %}
 </main>
 {% block javascripts %}

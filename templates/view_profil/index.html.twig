@@ -25,6 +25,7 @@
         <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Candidat</h1>
     {% endif %}
             <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
+
                 <div class="text-right">
                     <a href="{{ path('sendRelRequest',{'id':user.id}) }}"><i class="fas fa-user-friends"></i></a>
                 </div>
@@ -35,6 +36,7 @@
                         <p>{{user.nom | capitalize}}</p>
                     </div>
                 </div>
+                {% if visible %}
                 <div class="detail-individu grid grid-cols-1 gap-4">
                     <div class="adresse">
                         <span class="titre-detail">Adresse</span> <br>
@@ -134,5 +136,6 @@
                     </div>
                 </div>
             </section>
+    {% endif %}
 {% endblock %}
 

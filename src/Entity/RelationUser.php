@@ -37,6 +37,11 @@ class RelationUser
      */
     private $isAccepted;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeny;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class RelationUser
     public function setIsAccepted(bool $isAccepted): self
     {
         $this->isAccepted = $isAccepted;
+
+        return $this;
+    }
+
+    public function getIsDeny(): ?bool
+    {
+        return $this->isDeny;
+    }
+
+    public function setIsDeny(bool $isDeny): self
+    {
+        $this->isDeny = $isDeny;
 
         return $this;
     }

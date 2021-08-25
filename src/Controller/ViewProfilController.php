@@ -6,6 +6,7 @@ use App\Entity\Experience;
 use App\Entity\RelationUser;
 use App\Entity\User;
 use App\Form\ExperienceType;
+use App\Repository\RelationUserRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -16,19 +17,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ViewProfilController extends AbstractController
 {
-    private RelationUser $relationUser;
-
-    public function __construct(RelationUser $relationUser)
-    {
-        $this->relationUser = $relationUser;
-    }
-
     #[Route('/view/profil/{id}', name: 'view_profil')]
-    public function index(User $user): Response
+    public function index(User $user, RelationUserRepository $relationUserRepository): Response
     {
-
+        $isVisible=false;
+        $isMyCollegue=$relationUserRepository->canSee($user->getId());
+        foreach ($isMyCollegue as $collegue) {
+            if($collegue->getIsAccepted()) {
+                $isVisible=true;
+            }
+        }
         return $this->render('view_profil/index.html.twig', [
             'user' => $user,
+            'visible'=>$isVisible
         ]);
     }
     #[Route('profil/{id}/add/experience', name: 'add_experience_user')]
@@ -60,20 +61,24 @@ class ViewProfilController extends AbstractController
     }
 
     #[Route('/send/relRequest/{id}', name: 'sendRelRequest')]
-    #[ParamConverter('user', class: 'App\Entity\RelationUser')]
+    #[ParamConverter('id', class: User::class)]
 
-    public function requestRelation(User $user, UserRepository $userRepository ,EntityManagerInterface $entityManager)
+    public function requestRelation(User $user,UserRepository $userRepository ,EntityManagerInterface $entityManager)
     {
         $userLogged=$this->getUser();
         $userID=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
-        $this->relationUser->setUser($userID);
-        $this->relationUser->setRequestUser($user);
-        $entityManager->persist($this->relationUser);
+        $relationUser = new RelationUser();
+        $relationUser->setUser($userID);
+        $relationUser->setRequestUser($user);
+        $relationUser->setPending(true);
+        $relationUser->setIsAccepted(false);
+        $relationUser->setIsDeny(false);
+        $entityManager->persist($relationUser);
 
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('app_profil');
+        return $this->redirect('/view/profil/'.$user->getId());
 
     }
 
