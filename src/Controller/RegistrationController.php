@@ -42,6 +42,8 @@ class RegistrationController extends AbstractController
             );
             $user->setIsAccepted(false);
             $user->setIsAvailable(true);
+            $user->setAnniversaryDate(new \DateTime());
+            $user->setModifDate(new \DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\AdressTemp;
+use App\Entity\Experience;
 use App\Entity\RelationUser;
 use App\Entity\User;
 use App\Form\AdressTempType;
@@ -75,6 +76,12 @@ class ProfilController extends AbstractController
         foreach ($userCollegue as $req) {
             $myCollegue[]= $req->getRequestUser();
         }
+        $userAnniversaryDate=$user->getAnniversaryDate();
+        $actualDate = new \DateTime('now');
+        $anciennete = date_diff($actualDate,$userAnniversaryDate);
+
+        $ownerExperience =$this->getDoctrine()->getRepository(Experience::class)->findBy(['user'=>$user->getId()]);
+
 
 
 
@@ -85,11 +92,14 @@ class ProfilController extends AbstractController
             'relPending'=>$requestToValidate,
             'relSend'=>$myRequest,
             'collegue'=>$myCollegue,
+            'dateAnniversaire'=>$userAnniversaryDate,
+            'anciennete'=>$anciennete,
+            'expNum'=>count($ownerExperience)
 
         ]);
     }
-
     #[Route('/relRequest/accept/{id}', name: 'accept_request', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
     public function acceptRequest(User $user, RelationUserRepository $relationUserRepository, EntityManagerInterface $entityManager)
     {
         $relationUser=$relationUserRepository->acceptRequest($user->getId(),$this->getUser()->getId());
@@ -122,6 +132,7 @@ class ProfilController extends AbstractController
 
 
     #[Route('/profil/edit/profil', name: 'edit_profil', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
     public function editUser(Request $request,EntityManagerInterface $entityManager, PhotoProfilRepository $photoProfilRepository, Filesystem $filesystem, Kernel $kernel, AdressRepository $adressRepository,AdressTempRepository $adressTempRepository ,HttpClientInterface $client):Response
     {
         //User info modification
@@ -205,6 +216,10 @@ class ProfilController extends AbstractController
             return $this->redirectToRoute('edit_profil', [], Response::HTTP_SEE_OTHER);
         }
         $adressChoice=$adressTempRepository->findAll();
+        $user->setModifDate(new \DateTime());
+        $entityManager->persist($user);
+        $entityManager->flush();
+
 
 
         return $this->renderForm('profil/edit.html.twig',[

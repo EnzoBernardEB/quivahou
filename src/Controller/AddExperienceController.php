@@ -26,6 +26,7 @@ class AddExperienceController extends AbstractController
             if($countCompetenceInExp>0) {
                 $user=$this->getUser();
                 $experience->setUser($user);
+                $user->setModifDate(new \DateTime());
                 $entityManager->persist($experience);
                 $entityManager->flush();
                 $this->addFlash('successExp','Experience bien enregistrée.');
@@ -35,6 +36,7 @@ class AddExperienceController extends AbstractController
             }
 
         }
+
 
 
         return $this->render('add_experience/index.html.twig', [
@@ -56,10 +58,23 @@ class AddExperienceController extends AbstractController
             return $this->redirectToRoute('add_experience', [], Response::HTTP_SEE_OTHER);
 
         }
+        $user=$this->getUser();
+        $user->setModifDate(new \DateTime());
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         return $this->renderForm('add_experience/edit.html.twig', [
             'experience' => $experience,
             'form' => $formEditExperience,
         ]);
+    }
+
+    #[Route('/profil/remove/experience/{id}', name: 'remove_experience')]
+    public function delete(EntityManagerInterface $entityManager, Experience $experience)
+    {
+        $entityManager->remove($experience);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_profil');
     }
 }

@@ -136,6 +136,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $collegueRequest;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $anniversaryDate;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $modifDate;
+
 
     public function __construct()
     {
@@ -556,6 +566,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $collegueRequest->setRequestUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAnniversaryDate(): ?\DateTimeInterface
+    {
+        return $this->anniversaryDate;
+    }
+
+    public function setAnniversaryDate(\DateTimeInterface $anniversaryDate): self
+    {
+        $this->anniversaryDate = $anniversaryDate;
+
+        return $this;
+    }
+
+    public function getModifDate(): ?\DateTimeInterface
+    {
+        return $this->modifDate;
+    }
+
+    public function setModifDate(\DateTimeInterface $modifDate): self
+    {
+        $this->modifDate = $modifDate;
 
         return $this;
     }

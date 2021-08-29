@@ -92,6 +92,7 @@ class AddAdresseController extends AbstractController
             $entityManager->flush();
             $entityManager->persist($user);
             $entityManager->flush();
+            $this->addFlash('successAdress','Adresse bien enregistrée.');
         } else {
             $this->addFlash('alreadyAdress',"Vous avez déja une adresse renseignée.");
         }
@@ -100,7 +101,6 @@ class AddAdresseController extends AbstractController
             $entityManager->remove($adress);
             $entityManager->flush();
         }
-        $this->addFlash('successAdress','Adresse bien enregistrée.');
         return $this->redirectToRoute('search_adress');
     }
 
@@ -131,6 +131,10 @@ class AddAdresseController extends AbstractController
             $entityManager->remove($adress);
             $entityManager->flush();
         }
+        $user=$this->getUser();
+        $user->setModifDate(new \DateTime());
+        $entityManager->persist($user);
+        $entityManager->flush();
         return $this->redirectToRoute('edit_profil');
     }
 }

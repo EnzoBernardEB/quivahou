@@ -10,5 +10,8 @@
     {% else %}
      <p>Aucun compte à valider.</p>
     {% endif %}
+    {% if isCommercial %}
+    <a href="{{ path('commercial') }}">Panel commercial</a> <br>
+    {% endif %}
     <a href="{{ path('app_profil') }}">Retour sur profil</a>
 {% endblock %}

@@ -23,6 +23,7 @@
                 <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
             {% endfor %}
 
+
             <div class="m-auto border rounded-2xl p-2 w-9/12 text-2xl text-center text-gray-900 bg-gray-300 underline">
                 <a href="{{ path('search_adress') }}">Veuillez désormais completer votre profil.</a>
             </div>
@@ -34,6 +35,9 @@
             {% else %}
                 <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Candidat</h1>
             {% endif %}
+            {% for message in app.flashes('oneCompetence') %}
+                <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+            {% endfor %}
                 <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
                     <div class="text-right">
                         <ul id="menu-profil">
@@ -65,8 +69,10 @@
                             {{ app.user.adresse.city }}
                         </div>
                         <div class="ancienneté">
-                            <span class="titre-detail">Date d'anniversaire entreprise</span> <br>
-                            xx/xx/xxxx
+                            <span class="titre-detail">Inscrit depuis le :</span> <br>
+                            {{ dateAnniversaire | date("d/m/Y")}} <br>
+                            {{ anciennete.y }} ans, {{ anciennete.m }} mois et {{ anciennete.d }} jours d'ancienneté.
+
                         </div>
                         <div class="telephone">
                             <span class="titre-detail">Téléphone</span> <br>
@@ -94,6 +100,7 @@
                     <div id="tabs-1" >
                         <a href="{{ path('add_experience') }}"><i class="fas fa-plus"></i></a>
                         <div class="grid grid-cols-4 gap-2 mt-10">
+                            {% if expNum > 0 %}
                             {% for experience in app.user.experience %}
                                 <div class="relative flex flex-col justify-center border border-gray-900 shadow-2xl p-2">
                                     <h2 class="text-center border border-gray-400 shadow-inner p-2 font-bold mb-2 ">{{ experience.nom }}</h2>
@@ -105,11 +112,17 @@
                                             {% endfor %}
                                         </ul>
                                         <span class="font-bold mb-4">Type de mission : </span><p>{{ experience.type }}</p>
-                                        <a href="{{ path('edit_experience', {'id': experience.id}) }}" class="absolute bottom-1.5 right-1.5"><i class="fas fa-edit"></i></a>
+                                        <div class="absolute bottom-1.5 right-1.5">
+                                            <a href="{{ path('edit_experience', {'id': experience.id}) }}" ><i class="fas fa-edit"></i></a>
+                                            <a href="{{ path('remove_experience',{'id':experience.id}) }}" ><i class="fas fa-trash-alt"></i></a>
+                                        </div>
+
                                     </div>
                                 </div>
-
                             {% endfor %}
+                                {% else %}
+                                    Aucune experience...
+                                    {% endif %}
                         </div>
                     </div>
                     <div id="tabs-2">
@@ -127,7 +140,10 @@
                                             Volonté d'approfondir : {% if competence.isLiked ==true %}Oui{% else %}Non{% endif %}
                                         </p>
                                     </div>
-                                    <a href="{{ path('edit_competence', {'id': competence.id}) }}" class="absolute bottom-1.5 right-1.5"><i class="fas fa-edit"></i></a>
+                                    <div class="absolute bottom-1.5 right-1.5">
+                                        <a href="{{ path('edit_competence', {'id': competence.id}) }}"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ path('remove_competence',{'id':competence.id}) }}" ><i class="fas fa-trash-alt"></i></a>
+                                    </div>
                                 </li>
                             </div>
                         {% endfor %}
@@ -147,8 +163,8 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {% if is_granted('ROLE_COLLABORATEUR') %}
                     <div id="tabs-4">
+                        {% if is_granted('ROLE_COLLABORATEUR') %}
                         <div class="flex flex-col">
                             {{ form_start(form,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
                             {{ form_label(form.query) }}
@@ -200,10 +216,10 @@
 
                             </div>
                         </div>
-                    </div>
                         {% else %}
                         <p class="mt-10 font-bold text-center">Vous n'êtes pas encore autorisé à utiliser cette fonctionnalité.</p>
                         {% endif %}
+                    </div>
                 </div>
             </section>
             {% else %}

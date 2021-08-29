@@ -8,6 +8,7 @@ use App\Form\CompetenceType;
 use App\Form\CompetenceUserType;
 use App\Repository\CompetenceRepository;
 use App\Repository\UserHasCompetenceRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +47,7 @@ class AddCompetenceController extends AbstractController
                 $this->addFlash('alreadyCompetence','Cette compétence est déja enregistrée.');
             } else {
                 $userCompetence->setCompetence($competence);
+                $user->setModifDate(new \DateTime());
                 $entityManager->persist($userCompetence);
                 $entityManager->flush();
                 $this->addFlash('successAdd','Compétence enregistrée.');
@@ -55,7 +57,6 @@ class AddCompetenceController extends AbstractController
 
             $this->redirectToRoute('add_competence');
             }
-
 
 
         return $this->render('add_competence/index.html.twig', [
@@ -75,10 +76,31 @@ class AddCompetenceController extends AbstractController
             }
             return $this->redirectToRoute('add_competence', [], Response::HTTP_SEE_OTHER);
         }
+        $user=$this->getUser();
+        $user->setModifDate(new \DateTime());
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         return $this->renderForm('add_competence/edit.html.twig', [
             'competence' => $userHasCompetence,
             'form' => $formEditCompetence,
         ]);
+    }
+
+    #[Route('/profil/remove/competence/{id}', name: 'remove_competence')]
+    public function delete(EntityManagerInterface $entityManager, UserHasCompetence $userHasCompetence, UserRepository $userRepository, UserHasCompetenceRepository $userHasCompetenceRepository)
+    {
+
+        $ownerCompetence= $userRepository->findOneBy(['id'=>$userHasCompetence->getUser()->getId()]);
+        $userCompetence = $userHasCompetenceRepository->findBy(['user'=>$ownerCompetence->getId()]);
+        if(count($userCompetence) > 1) {
+            $entityManager->remove($userHasCompetence);
+            $entityManager->flush();
+        } else {
+            $this->addFlash('oneCompetence','Vous devez possedez au moins une compétence.');
+        }
+
+
+        return $this->redirectToRoute('app_profil');
     }
 }

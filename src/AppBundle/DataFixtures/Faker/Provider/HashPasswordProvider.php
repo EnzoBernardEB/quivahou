@@ -7,8 +7,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HashPasswordProvider
 {
-    private UserPasswordHasherInterface $hasher;
-
+    /**
+     * @var UserPasswordHasherInterface
+     */
+    private $encoder;
     public function __construct(UserPasswordHasherInterface $hasher)
     {
         $this->hasher = $hasher;
@@ -16,7 +18,7 @@ class HashPasswordProvider
 
     public function hashPassword(string $plainPassword): string
     {
-        return $this->hasher->hashPassword(new User(),$plainPassword);
+        return $this->hasher->hashPassword(new User(), $plainPassword);
     }
 
 }

@@ -30,12 +30,21 @@
                     <a href="{{ path('sendRelRequest',{'id':user.id}) }}"><i class="fas fa-user-friends"></i></a>
                 </div>
                 <div class="identite flex flex-col items-center mb-8">
+                    {% if isPhoto %}
                     <img src="{{ asset('uploads/photo/' ~ user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain rounded-full">
+                    {% else %}
+                    <img src="https://picsum.photos/200/300" alt="photo de profil" class="w-40 object-contain rounded-full">
+                    {% endif %}
                     <div class="flex p-4 text-2xl font-bold">
                         <p class="mr-4"> {{user.prenom | capitalize}}</p>
                         <p>{{user.nom | capitalize}}</p>
                     </div>
                 </div>
+                {% if available %}
+                <div class="bg-green-300 w-12 h-12 rounded-full m-auto mb-8"></div>
+                {% else %}
+                <div class="bg-red-300 w-12 h-12 rounded-full m-auto mb-8"></div>
+                {% endif %}
                 {% if visible %}
                 <div class="detail-individu grid grid-cols-1 gap-4">
                     <div class="adresse">
@@ -51,8 +60,9 @@
                         {{ user.adresse.city }}
                     </div>
                     <div class="ancienneté">
-                        <span class="titre-detail">Date d'anniversaire entreprise</span> <br>
-                        xx/xx/xxxx
+                        <span class="titre-detail">Inscrit depuis le :</span> <br>
+                        {{ dateAnniversaire | date("d/m/Y")}} <br>
+                        {{ anciennete.y }} ans, {{ anciennete.m }} mois et {{ anciennete.d }} jours d'ancienneté.
                     </div>
                     <div class="telephone">
                         <span class="titre-detail">Téléphone</span> <br>

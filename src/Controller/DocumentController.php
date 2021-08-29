@@ -66,11 +66,13 @@ class DocumentController extends AbstractController
                 $document->setProprietaire($user);
                 $entityManager->persist($document);
                 $entityManager->flush();
-
                 $docNumber=count($documentRepository->findBy(['proprietaire'=>$user]));
-                $this->addFlash('success','Document bien enregistré.');
+                $this->addFlash('successDoc','Document bien enregistré.');
                 $this->redirectToRoute('add_document');
             }
+        } elseif ($formAddDocument->isSubmitted() && !$formAddDocument->isValid()){
+            $this->addFlash('errorDoc','Document pas valide.');
+            $this->redirectToRoute('add_document');
         }
 
         $formAddPhoto = $this->createForm(PhotoType::class);
@@ -100,9 +102,12 @@ class DocumentController extends AbstractController
 
                 $photoNumber=count($photoProfilRepository->findBy(['user'=>$user]));
 
-                $this->addFlash('success','La photo est bien enregistré.');
+                $this->addFlash('successPhoto','La photo est bien enregistré.');
                 $this->redirectToRoute('add_document');
             }
+        }elseif ($formAddDocument->isSubmitted() && !$formAddDocument->isValid()){
+            $this->addFlash('errorPhoto','Photo non valide.');
+            $this->redirectToRoute('add_document');
         }
 
         return $this->render('document/index.html.twig', [
@@ -139,7 +144,7 @@ class DocumentController extends AbstractController
                 $this->addFlash('documentBig','Fichier trop volumineux, ne pas dépasser 1024K.');
                 return $this->redirectToRoute('app_profil');
             } else {
-                if(($formEditDocument->isSubmitted() && $formEditDocument->isValid())) {
+                if($formEditDocument->isSubmitted() && $formEditDocument->isValid()) {
                     $originalFilename=pathinfo($userDocument->getClientOriginalName(),PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename=$safeFilename.'-'.uniqid($this->getUser()->getPrenom(),true).'.'.$userDocument->guessExtension();
@@ -152,11 +157,14 @@ class DocumentController extends AbstractController
                         $this->addFlash('ErrorUploadDocument','Il y eu une erreur lors de l\'upload du document, veuillez réessayer.');
                         $this->redirectToRoute('add_document');
                     }
+                    $this->getUser()->setModifDate(new \DateTime());
+                    $entityManager->persist($this->getUser());
                     $document->setFilename($newFilename);
                     $entityManager->flush();
                     //delete photo from public folder
                     $path=$kernel->getProjectDir() .'/public/uploads/document/'.$oldFilename;
-                    $filesystem->remove([$path]);}
+                    $filesystem->remove([$path]);
+                }
                 $this->addFlash('successModifDocument','Document bien modifié.');
                 return $this->redirectToRoute('app_profil');
                 }

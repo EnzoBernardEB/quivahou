@@ -14,7 +14,7 @@ services:
         autoconfigure: true
 
     App\AppBundle\DataFixtures\Faker\Provider\HashPasswordProvider:
-        tags: [{ name: nelmio_alice.faker.provider }]
+        tags: [ { name: nelmio_alice.faker.provider } ]
 
     # default configuration for services in *this* file
     _defaults:

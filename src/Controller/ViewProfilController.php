@@ -27,9 +27,24 @@ class ViewProfilController extends AbstractController
                 $isVisible=true;
             }
         }
+        $userRoles=$this->getUser()->getRoles();
+        if (in_array('ROLE_COMMERCIAL',$userRoles) or in_array('ROLE_ADMIN',$userRoles)){
+            $isVisible=true;
+        }
+        $isAvailable=$user->getIsAvailable();
+        $userAnniversaryDate=$user->getAnniversaryDate();
+        $actualDate = new \DateTime('now');
+        $anciennete = date_diff($actualDate,$userAnniversaryDate);
+
+        $isPhoto=file_exists('uploads/photo/'.$user->getFilename());
+
         return $this->render('view_profil/index.html.twig', [
             'user' => $user,
-            'visible'=>$isVisible
+            'visible'=>$isVisible,
+            'available'=>$isAvailable,
+            'dateAnniversaire'=>$userAnniversaryDate,
+            'anciennete'=>$anciennete,
+            'isPhoto'=>$isPhoto
         ]);
     }
     #[Route('profil/{id}/add/experience', name: 'add_experience_user')]
@@ -61,16 +76,10 @@ class ViewProfilController extends AbstractController
     }
 
     #[Route('/send/relRequest/{id}', name: 'sendRelRequest')]
-<<<<<<< HEAD
     #[ParamConverter('id', class: User::class)]
-=======
-    #[ParamConverter('user', class: User::class)]
->>>>>>> 08e296e065f58a0f39e2a2602d55cfcacdb50d60
-
     public function requestRelation(User $user,UserRepository $userRepository ,EntityManagerInterface $entityManager)
     {
         $userLogged=$this->getUser();
-<<<<<<< HEAD
         $userID=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
         $relationUser = new RelationUser();
         $relationUser->setUser($userID);
@@ -84,19 +93,6 @@ class ViewProfilController extends AbstractController
 
 
         return $this->redirect('/view/profil/'.$user->getId());
-=======
-        $userActif=$userRepository->findOneBy(['id'=>$userLogged->getId()]);
-        $relationUser=new RelationUser();
-        $relationUser->setUser($userActif);
-        $relationUser->setRequestUser($user);
-        $relationUser->setIsAccepted(false);
-        $relationUser->setPending(true);
-        $entityManager->persist($relationUser);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_profil');
->>>>>>> 08e296e065f58a0f39e2a2602d55cfcacdb50d60
-
     }
 
 

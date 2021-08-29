@@ -13,7 +13,7 @@
             Il y a {{ colab }} collaborateur.
         </div>
         <div class="grid-col-2 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
-            Il y a {{ commercial }} commerciaux.
+            <p>Les 10 derniers profils modifiés</p>
         </div>
         <div class="grid-col-3 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
             Il y a {{ candidat }} candidats.
@@ -27,8 +27,8 @@
         </div>
         <div class="grid-col-2">
             <ul>
-                {% for commerciaux in allCommercial %}
-                    <li>{{ commerciaux.prenom }} {{ commerciaux.nom }}</li>
+                {% for modifie in profilModif %}
+                    <li><a href="{{ path('view_profil',{'id':modifie.id}) }}">{{ modifie.prenom }} {{ modifie.nom }}</a></li>
                 {% endfor %}
             </ul>
 
@@ -41,7 +41,10 @@
             </ul>
         </div>
     </div>
-    <div class="mt-10 text-center border-2 border-green-600 bg-green-300 p-2">
+    <div class="mt-10 mb-10 text-center border-2 border-green-600 bg-green-300 p-2">
         <a href="{{ path('search') }}" >Effectuer une recherche</a>
     </div>
+    {% if isAdmin %}
+        <a  href="{{ path('admin') }}">Panel admin</a> <br>
+    {% endif %}
 {% endblock %}

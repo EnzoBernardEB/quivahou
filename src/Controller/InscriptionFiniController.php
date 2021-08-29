@@ -17,10 +17,12 @@ class InscriptionFiniController extends AbstractController
         $roles=$user->getRoles();
         $roles[]='ROLE_CANDIDAT';
         $user->setRoles($roles);
+        $user->setModifDate(new \DateTime());
 
         $entityManager->persist($user);
         $entityManager->flush();
+        $this->addFlash('profilComplete','Votre profil est bien complété, veuillez vous reconnecter');
 
-        return $this->redirectToRoute('app_profil');
+        return $this->redirectToRoute('app_login');
     }
 }

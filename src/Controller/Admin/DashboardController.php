@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Categorie;
 use App\Entity\Competence;
+use App\Entity\Entreprise;
 use App\Entity\TypeMission;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -20,10 +21,19 @@ class DashboardController extends AbstractDashboardController
     {
         $accounts = $this->getDoctrine()->getRepository(User::class)->count([]);
         $accountsPendingAccept = $this->getDoctrine()->getRepository(User::class)->findBy(['isAccepted'=>false]);
+        $userRole=$this->getUser()->getRoles();
+        if (in_array('ROLE_COMMERCIAL',$userRole)) {
+            $isCommercial=true;
+        } else {
+            $isCommercial=false;
+        }
+
+
 
         return $this->render('Admin/dashboard.html.twig', [
             'accounts' => $accounts,
             'accountsPending'=>count($accountsPendingAccept),
+            'isCommercial'=>$isCommercial
         ]);
     }
 
@@ -40,6 +50,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Catégorie', 'fas fa-list-alt', Categorie::class);
         yield MenuItem::linkToCrud('Compétence', 'fas fa-clipboard-list ', Competence::class);
         yield MenuItem::linkToCrud('Type experience', 'fas fa-align-justify ', TypeMission::class);
+        yield MenuItem::linkToCrud('Entreprise', 'fas fa-building', Entreprise::class);
     }
 
 }

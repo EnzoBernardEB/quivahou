@@ -26,9 +26,9 @@ class UserCrudController extends AbstractCrudController
         return [
             TextField::new('nom'),
             TextField::new('prenom'),
-            ArrayField::new('roles'),
             TextField::new('email'),
-            DateField::new('date_de_naissance'),
+            DateField::new('date_de_naissance')->setFormat('dd-MM-Y'),
+            DateField::new('anniversaryDate')->setFormat('dd-MM-Y'),
             TelephoneField::new('telephone'),
             BooleanField::new('isVerified'),
             BooleanField::new('isCompleted'),

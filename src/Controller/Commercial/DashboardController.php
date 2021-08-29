@@ -24,8 +24,6 @@ class DashboardController extends AbstractDashboardController
             $userRole=$user->getRoles();
             if (in_array('ROLE_COLLABORATEUR',$userRole)) {
                 $userCollaborateur[]=$user;
-            } elseif (in_array('ROLE_COMMERCIAL',$userRole)) {
-                $userCommercial[]=$user;
             } elseif (in_array('ROLE_CANDIDAT',$userRole)) {
                 $userCandidat[]=$user;
             }
@@ -33,7 +31,13 @@ class DashboardController extends AbstractDashboardController
         $collab=count($userCollaborateur);
         $commercial=count($userCommercial);
         $candidat=count($userCandidat);
-
+        $userRole=$this->getUser()->getRoles();
+        if (in_array('ROLE_ADMIN',$userRole)) {
+            $isAdmin=true;
+        } else {
+            $isAdmin=false;
+        }
+        $userModif=$this->getDoctrine()->getRepository(User::class)->lastModif();
 
         return $this->render('commercial/dashboard.html.twig', [
             'colab' => $collab,
@@ -42,6 +46,9 @@ class DashboardController extends AbstractDashboardController
             'allColab' => $userCollaborateur,
             'allCommercial'=>$userCommercial,
             'allCandidat'=>$userCandidat,
+            'isAdmin'=>$isAdmin,
+            'profilModifNumber'=>count($userModif),
+            'profilModif'=>$userModif
         ]);
     }
 
