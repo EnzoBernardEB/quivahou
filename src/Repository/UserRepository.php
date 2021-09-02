@@ -49,10 +49,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.prenom LIKE :query OR u.nom LIKE :query')
             ->setParameter('role',$role)
             ->setParameter('query',$value)
-            ->orderBy('u.id', 'ASC')
+            ->orderBy('u.anniversaryDate', 'ASC')
+            ->setMaxResults(20)
             ->getQuery()
             ->getResult();
     }
+
+    public function isAvailable($value)
+    {
+        $roleAdmin = '"ROLE_ADMIN"';
+        $roleCommercial= '"ROLE_COMMERCIAL"';
+        $roleCollaborateur = '"ROLE_COLLABORATEUR"';
+
+        return $this->createQueryBuilder('u')
+            ->andWhere('JSON_CONTAINS(u.roles, :roleCo) = 1 and JSON_CONTAINS(u.roles, :roleA) = 0 and JSON_CONTAINS(u.roles, :roleC) = 0')
+            ->andWhere('u.isAvailable = :value')
+            ->setParameter('roleA',$roleAdmin)
+            ->setParameter('roleC',$roleCommercial)
+            ->setParameter('roleCo',$roleCollaborateur)
+            ->setParameter('value',$value)
+            ->orderBy('u.modifDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     public function lastModif()
     {

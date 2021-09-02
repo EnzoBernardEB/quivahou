@@ -26,6 +26,7 @@ class UserCrudController extends AbstractCrudController
         return [
             TextField::new('nom'),
             TextField::new('prenom'),
+            ArrayField::new('roles'),
             TextField::new('email'),
             DateField::new('date_de_naissance')->setFormat('dd-MM-Y'),
             DateField::new('anniversaryDate')->setFormat('dd-MM-Y'),
@@ -33,6 +34,7 @@ class UserCrudController extends AbstractCrudController
             BooleanField::new('isVerified'),
             BooleanField::new('isCompleted'),
             BooleanField::new('isAccepted'),
+            BooleanField::new('isAvailable'),
         ];
     }
     public function configureActions(Actions $actions): Actions

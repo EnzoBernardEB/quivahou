@@ -146,6 +146,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $modifDate;
 
+    /**
+     * @ORM\OneToOne(targetEntity=MissionEnCours::class, mappedBy="employe",cascade={"remove"})
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $missionEnCours;
+
 
     public function __construct()
     {
@@ -276,7 +282,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->nom;
     }
-
+    public function __toString(): string
+    {
+        return $this->getNom();
+    }
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
@@ -590,6 +599,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setModifDate(\DateTimeInterface $modifDate): self
     {
         $this->modifDate = $modifDate;
+
+        return $this;
+    }
+
+    public function getMissionEnCours(): ?MissionEnCours
+    {
+        return $this->missionEnCours;
+    }
+
+    public function setMissionEnCours(MissionEnCours $missionEnCours): self
+    {
+        // set the owning side of the relation if necessary
+        if ($missionEnCours->getEmploye() !== $this) {
+            $missionEnCours->setEmploye($this);
+        }
+
+        $this->missionEnCours = $missionEnCours;
 
         return $this;
     }

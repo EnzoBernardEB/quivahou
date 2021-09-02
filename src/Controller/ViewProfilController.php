@@ -31,7 +31,6 @@ class ViewProfilController extends AbstractController
         if (in_array('ROLE_COMMERCIAL',$userRoles) or in_array('ROLE_ADMIN',$userRoles)){
             $isVisible=true;
         }
-        $isAvailable=$user->getIsAvailable();
         $userAnniversaryDate=$user->getAnniversaryDate();
         $actualDate = new \DateTime('now');
         $anciennete = date_diff($actualDate,$userAnniversaryDate);
@@ -41,7 +40,6 @@ class ViewProfilController extends AbstractController
         return $this->render('view_profil/index.html.twig', [
             'user' => $user,
             'visible'=>$isVisible,
-            'available'=>$isAvailable,
             'dateAnniversaire'=>$userAnniversaryDate,
             'anciennete'=>$anciennete,
             'isPhoto'=>$isPhoto

@@ -1,4 +1,3 @@
-
 {% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block main %}
@@ -8,10 +7,11 @@
     {% elseif accountsPending == 1 %}
         <p>{{ accountsPending }} compte à valider.</p>
     {% else %}
-     <p>Aucun compte à valider.</p>
+        <p>Aucun compte à valider.</p>
     {% endif %}
     {% if isCommercial %}
-    <a href="{{ path('commercial') }}">Panel commercial</a> <br>
+        <a href="{{ path('commercial') }}">Panel commercial</a> <br>
     {% endif %}
+    <a href="{{ path('add_referent') }}">Assigner les référents</a> <br>
     <a href="{{ path('app_profil') }}">Retour sur profil</a>
 {% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AddReferentController!{% endblock %}
+
+{% block body %}
+    <div class=" flex col-span-full row-auto m-auto w-11/12 mt-6 bg-gray-300 p-4 border rounded-2xl">
+        {{ form_start(formRef,{'attr': {'class': 'flex flex-col w-2/4 text-xl'}}) }}
+
+        <div class="flex flex-col mb-2">
+            {{ form_label(formRef.commercial) }}
+            {{ form_widget(formRef.commercial) }}
+
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(formRef.collaborateur) }}
+            {{ form_widget(formRef.collaborateur) }}
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(formRef.Assigner) }}
+            {{ form_widget(formRef.Assigner) }}
+        </div>
+    </div>
+    {{ form_end(formRef) }}
+{% endblock %}

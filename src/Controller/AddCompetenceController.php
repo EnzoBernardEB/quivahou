@@ -18,65 +18,66 @@ use Symfony\Component\Routing\Annotation\Route;
 class AddCompetenceController extends AbstractController
 {
     #[Route('profil/add/competence', name: 'add_competence')]
-    public function index(Request$request,EntityManagerInterface $entityManager,CompetenceRepository $competenceRepository, UserHasCompetenceRepository $userHasCompetenceRepository): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, CompetenceRepository $competenceRepository, UserHasCompetenceRepository $userHasCompetenceRepository): Response
     {
 
-        $userCompetence=new UserHasCompetence();
-        $formAddCompetence = $this->createForm(CompetenceUserType::class,$userCompetence);
+        $userCompetence = new UserHasCompetence();
+        $formAddCompetence = $this->createForm(CompetenceUserType::class, $userCompetence);
         $formAddCompetence->handleRequest($request);
 
         if ($formAddCompetence->isSubmitted() && $formAddCompetence->isValid()) {
 
             $userCompetence = $formAddCompetence->getData();
-            $competenceName= $userCompetence->getCompetence()->getNom();
-            $competence=$competenceRepository->findOneBy(['nom'=>$competenceName]);
+            $competenceName = $userCompetence->getCompetence()->getNom();
+            $competence = $competenceRepository->findOneBy(['nom' => $competenceName]);
 
-            $user=$this->getUser();
+            $user = $this->getUser();
 
             $userCompetence->setUser($user);
 
-            $userCompetenceArray=$userHasCompetenceRepository->findBy(['user'=>$user]);
-            $competenceId=[];
+            $userCompetenceArray = $userHasCompetenceRepository->findBy(['user' => $user]);
+            $competenceId = [];
 
-            foreach($userCompetenceArray as $competenceInUser) {
-                $competenceId[]=$competenceInUser->getCompetence()->getId();
+            foreach ($userCompetenceArray as $competenceInUser) {
+                $competenceId[] = $competenceInUser->getCompetence()->getId();
             }
             $checkIdCompetence = $competence->getId();
 
-            if (in_array($checkIdCompetence,$competenceId)) {
-                $this->addFlash('alreadyCompetence','Cette compétence est déja enregistrée.');
+            if (in_array($checkIdCompetence, $competenceId)) {
+                $this->addFlash('alreadyCompetence', 'Cette compétence est déja enregistrée.');
             } else {
                 $userCompetence->setCompetence($competence);
                 $user->setModifDate(new \DateTime());
                 $entityManager->persist($userCompetence);
                 $entityManager->flush();
-                $this->addFlash('successAdd','Compétence enregistrée.');
+                $this->addFlash('successAdd', 'Compétence enregistrée.');
 
             }
 
 
             $this->redirectToRoute('add_competence');
-            }
+        }
 
 
         return $this->render('add_competence/index.html.twig', [
             'form' => $formAddCompetence->createView(),
         ]);
     }
+
     #[Route('/profil/edit/competence/{id}', name: 'edit_competence', methods: ['GET', 'POST'])]
-    public function edit(Request $request,EntityManagerInterface $entityManager ,UserHasCompetence $userHasCompetence): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserHasCompetence $userHasCompetence): Response
     {
         $formEditCompetence = $this->createForm(CompetenceUserType::class, $userHasCompetence);
         $formEditCompetence->handleRequest($request);
 
         if ($formEditCompetence->isSubmitted() && $formEditCompetence->isValid()) {
             $entityManager->flush();
-            if($this->getUser()->getIsCompleted() ===true) {
+            if ($this->getUser()->getIsCompleted() === true) {
                 return $this->redirectToRoute('app_profil', [], Response::HTTP_SEE_OTHER);
             }
             return $this->redirectToRoute('add_competence', [], Response::HTTP_SEE_OTHER);
         }
-        $user=$this->getUser();
+        $user = $this->getUser();
         $user->setModifDate(new \DateTime());
         $entityManager->persist($user);
         $entityManager->flush();
@@ -91,13 +92,13 @@ class AddCompetenceController extends AbstractController
     public function delete(EntityManagerInterface $entityManager, UserHasCompetence $userHasCompetence, UserRepository $userRepository, UserHasCompetenceRepository $userHasCompetenceRepository)
     {
 
-        $ownerCompetence= $userRepository->findOneBy(['id'=>$userHasCompetence->getUser()->getId()]);
-        $userCompetence = $userHasCompetenceRepository->findBy(['user'=>$ownerCompetence->getId()]);
-        if(count($userCompetence) > 1) {
+        $ownerCompetence = $userRepository->findOneBy(['id' => $userHasCompetence->getUser()->getId()]);
+        $userCompetence = $userHasCompetenceRepository->findBy(['user' => $ownerCompetence->getId()]);
+        if (count($userCompetence) > 1) {
             $entityManager->remove($userHasCompetence);
             $entityManager->flush();
         } else {
-            $this->addFlash('oneCompetence','Vous devez possedez au moins une compétence.');
+            $this->addFlash('oneCompetence', 'Vous devez possedez au moins une compétence.');
         }
 
 

@@ -227,7 +227,8 @@ class ProfilController extends AbstractController
             'formPhoto'=>$formEditPhoto,
             'formAdresse'=>$formEditAdress,
             'response'=>$adressChoice,
-            'photoNumber'=>$photoNumber
+            'photoNumber'=>$photoNumber,
+            'user'=>$user
         ]);
     }
 }

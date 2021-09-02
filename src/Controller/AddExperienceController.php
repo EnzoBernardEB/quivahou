@@ -72,9 +72,13 @@ class AddExperienceController extends AbstractController
     #[Route('/profil/remove/experience/{id}', name: 'remove_experience')]
     public function delete(EntityManagerInterface $entityManager, Experience $experience)
     {
+        $ownerExp=$experience->getUser();
         $entityManager->remove($experience);
         $entityManager->flush();
-
-        return $this->redirectToRoute('app_profil');
+        if ($this->getUser() === $ownerExp) {
+            return $this->redirectToRoute('app_profil');
+        }else {
+            return $this->redirect('/view/profil/'.$ownerExp->getId());
+        }
     }
 }

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AssMissionController!{% endblock %}
+
+{% block body %}
+
+    <div class=" flex col-span-full row-auto m-auto w-11/12 mt-6 bg-gray-300 p-4 border rounded-2xl">
+        {{ form_start(formMission,{'attr': {'class': 'flex flex-col w-2/4 text-xl'}}) }}
+        <div class="flex flex-col mb-2">
+
+            {{ form_label(formMission.titre) }}
+            {{ form_widget(formMission.titre) }}
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(formMission.description) }}
+            {{ form_widget(formMission.description) }}
+
+        </div>
+        <div class="flex flex-col mb-2">
+            {{ form_label(formMission.entreprise) }}
+            {{ form_widget(formMission.entreprise) }}
+        </div>
+        <span class="self-end">
+            <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Assigner') }}</button>
+        </span>
+
+        {{ form_end(formMission) }}
+    </div>
+
+{% endblock %}

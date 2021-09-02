@@ -29,9 +29,16 @@ class Entreprise
      */
     private $experiences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MissionEnCours::class, mappedBy="entreprise", orphanRemoval=false)
+     */
+    private $missionEnCours;
+    
+
     public function __construct()
     {
         $this->experiences = new ArrayCollection();
+        $this->missionEnCours = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -42,6 +49,10 @@ class Entreprise
     public function getNom(): ?string
     {
         return $this->nom;
+    }
+    public function __toString(): string
+    {
+        return $this->getNom();
     }
 
     public function setNom(string $nom): self
@@ -80,4 +91,36 @@ class Entreprise
 
         return $this;
     }
+
+    /**
+     * @return Collection|MissionEnCours[]
+     */
+    public function getMissionEnCours(): Collection
+    {
+        return $this->missionEnCours;
+    }
+
+    public function addMissionEnCour(MissionEnCours $missionEnCour): self
+    {
+        if (!$this->missionEnCours->contains($missionEnCour)) {
+            $this->missionEnCours[] = $missionEnCour;
+            $missionEnCour->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMissionEnCour(MissionEnCours $missionEnCour): self
+    {
+        if ($this->missionEnCours->removeElement($missionEnCour)) {
+            // set the owning side to null (unless already changed)
+            if ($missionEnCour->getEntreprise() === $this) {
+                $missionEnCour->setEntreprise(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

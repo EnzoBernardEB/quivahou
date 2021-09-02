@@ -7,7 +7,9 @@
     {% endblock %}
 
 {% block main %}
-
+    <div class="mt-10 mb-10 text-center border-2 border-green-600 bg-green-300 p-2">
+        <a href="{{ path('search') }}" >Effectuer une recherche</a>
+    </div>
     <div class="grid grid-cols-3 gap-4 ">
         <div class="grid-col-1 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
             Il y a {{ colab }} collaborateur.
@@ -16,7 +18,7 @@
             <p>Les 10 derniers profils modifiés</p>
         </div>
         <div class="grid-col-3 bg-gray-400 h-40 flex justify-center items-center border-2 border-green-900">
-            Il y a {{ candidat }} candidats.
+            Il y a {{ numAvailable }} collaborateurs disponible.
         </div>
         <div class="grid-col-1">
             <ul>
@@ -35,15 +37,13 @@
         </div>
         <div class="grid-col-3">
             <ul>
-                {% for candidat in allCandidat %}
+                {% for candidat in available %}
                     <li><a href="{{ path('view_profil',{'id':candidat.id}) }}">{{ candidat.prenom }} {{ candidat.nom }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </div>
-    <div class="mt-10 mb-10 text-center border-2 border-green-600 bg-green-300 p-2">
-        <a href="{{ path('search') }}" >Effectuer une recherche</a>
-    </div>
+
     {% if isAdmin %}
         <a  href="{{ path('admin') }}">Panel admin</a> <br>
     {% endif %}
