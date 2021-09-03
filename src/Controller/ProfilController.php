@@ -22,6 +22,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -39,7 +42,10 @@ class ProfilController extends AbstractController
 
         if($user->getIsAccepted()===true && in_array($candidat,$userRole)) {
             $role=array_splice($userRole,array_search($candidat,$userRole),1);
-            $userRole='ROLE_COLLABORATEUR';
+            $userRole=$user->getRoles();
+            $userRole[]='ROLE_COLLABORATEUR';
+            $roleIdenx=array_search('ROLE_CANDIDAT',$userRole);
+            unset($userRole[$roleIdenx]);
             $user->setRoles($userRole);
 
             $entityManager->persist($user);
@@ -82,7 +88,8 @@ class ProfilController extends AbstractController
 
         $ownerExperience =$this->getDoctrine()->getRepository(Experience::class)->findBy(['user'=>$user->getId()]);
 
-
+        $referentID=$user->getReferent()->getId();
+        $referent=$userRepository->findOneBy(['id'=>$referentID]);
 
 
         return $this->render('profil/index.html.twig', [
@@ -94,13 +101,14 @@ class ProfilController extends AbstractController
             'collegue'=>$myCollegue,
             'dateAnniversaire'=>$userAnniversaryDate,
             'anciennete'=>$anciennete,
-            'expNum'=>count($ownerExperience)
+            'expNum'=>count($ownerExperience),
+            'referent'=>$referent
 
         ]);
     }
     #[Route('/relRequest/accept/{id}', name: 'accept_request', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
-    public function acceptRequest(User $user, RelationUserRepository $relationUserRepository, EntityManagerInterface $entityManager)
+    public function acceptRequest(User $user, RelationUserRepository $relationUserRepository, EntityManagerInterface $entityManager,MailerInterface $mailer)
     {
         $relationUser=$relationUserRepository->acceptRequest($user->getId(),$this->getUser()->getId());
         $UserRelRequest = $relationUserRepository->getRelRequest($user->getId());
@@ -116,6 +124,71 @@ class ProfilController extends AbstractController
                 $userRel->setIsDeny(false);
                 $entityManager->persist($userRel);
             }
+            $email = (new Email())
+                ->from($this->getUser()->getEmail())
+                ->to($user->getEmail())
+                ->subject('Assignation de mission')
+                ->text('
+                    Votre demande de relatation à été accépté.
+                    L\équipe Qivahou.
+                ')
+                ->html('<h1>Demande de relation à été accepté.</h1> <br> <p> 
+                    L\'équipe Qivahou </p>');
+            $mailer->send($email);
+        }
+
+        foreach ($relationUser as $relation) {
+            $relation->setIsAccepted(true);
+            $relation->setPending(false);
+            $relation->setIsDeny(false);
+            $entityManager->persist($relation);
+        }
+        // Je pourrais faire autrement , mais j'ai plein d'autre chose a gérer avant d'optimiser cette fonctionnalité
+        $userWhoAccept= new RelationUser();
+        $userWhoAccept->setUser($this->getUser());
+        $userWhoAccept->setRequestUser($user);
+        $userWhoAccept->setIsAccepted(true);
+        $userWhoAccept->setPending(false);
+        $userWhoAccept->setIsDeny(false);
+
+        $entityManager->persist($userWhoAccept);
+
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_profil');
+    }
+
+    #[Route('/relRequest/deny/{id}', name: 'deny_request', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
+    public function denyRequest(User $user, RelationUserRepository $relationUserRepository, EntityManagerInterface $entityManager, MailerInterface $mailer)
+    {
+        $relationUser=$relationUserRepository->acceptRequest($user->getId(),$this->getUser()->getId());
+        $UserRelRequest = $relationUserRepository->getRelRequest($user->getId());
+        $requestId=[];
+        foreach ($UserRelRequest as $requestUserDid) {
+            $requestId[]=$requestUserDid->getRequestUser()->getId();
+        }
+        if (in_array($this->getUser()->getId(), $requestId, true)){
+            $relationUserRequest=$relationUserRepository->acceptRequest($this->getUser()->getId(),$user->getId());
+            foreach ($relationUserRequest as $userRel) {
+                $userRel->setIsAccepted(false);
+                $userRel->setPending(false);
+                $userRel->setIsDeny(true);
+                $entityManager->persist($userRel);
+            }
+            $email = (new Email())
+                ->from($this->getUser()->getEmail())
+                ->to($user->getEmail())
+                ->subject('Assignation de mission')
+                ->text('
+                    Votre demande de relatation n\'a pas abouti.
+                    L\équipe Qivahou.
+                ')
+                ->html('<h1>Demande de relation n\'a pas abouti</h1> <br> <p> 
+                    L\'équipe Qivahou </p>');
+            $mailer->send($email);
+
         }
 
         foreach ($relationUser as $relation) {

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\MissionEnCours;
 use App\Entity\User;
 use App\Form\MissionType;
+use App\Repository\MissionEnCoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,13 +25,15 @@ class AddMissionController extends AbstractController
         $formMission->handleRequest($request);
 
         if ($formMission->isSubmitted() && $formMission->isValid() ) {
-            if ($user->getIsAvailable()===false) {
+            if ($user->getIsAvailable()===true) {
                 $newMission=$formMission->getData();
                 $entreprise=$formMission->get('entreprise')->getData();
                 $titre=$formMission->get('titre')->getData();
                 $description=$formMission->get('description')->getData();
                 $newMission->setEmploye($user);
+                $user->setIsAvailable(false);
                 $entityManager->persist($newMission);
+                $entityManager->persist($user);
                 $entityManager->flush();
 
                 $email = (new Email())
@@ -64,4 +67,17 @@ class AddMissionController extends AbstractController
             'formMission' => $formMission->createView(),
         ]);
     }
+
+    #[Route('/remove/mission/{id}', name: 'fin_mission'),IsGranted('ROLE_COMMERCIAL')]
+    public function finDeMission(User $user,EntityManagerInterface $entityManager,MissionEnCoursRepository $missionEnCoursRepository)
+    {
+        $userMission=$missionEnCoursRepository->findOneBy(['employe'=>$user->getId()]);
+        $user->setIsAvailable(true);
+        $entityManager->remove($userMission);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('finMission','Fin de mission, un email à été envoyé au collaborateur.');
+        return $this->redirect('/view/profil/'.$user->getId());
+    }
+
 }

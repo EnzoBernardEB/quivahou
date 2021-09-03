@@ -109,12 +109,18 @@ class DocumentController extends AbstractController
             $this->addFlash('errorPhoto','Photo non valide.');
             $this->redirectToRoute('add_document');
         }
+        if ($docNumber===2 && $photoNumber ===1){
+            $fini=true;
+        }else {
+            $fini=false;
+        }
 
         return $this->render('document/index.html.twig', [
             'formAddDocument' => $formAddDocument->createView(),
             'formPhoto'=>$formAddPhoto->createView(),
             'docNumber'=>$docNumber,
-            'photoNumber'=>$photoNumber
+            'photoNumber'=>$photoNumber,
+            'fini'=>$fini
         ]);
     }
 

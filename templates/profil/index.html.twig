@@ -39,15 +39,21 @@
                 <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
             {% endfor %}
                 <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
-                    <div class="text-right">
-                        <ul id="menu-profil">
-                            <li><div><i class="fas fa-edit"></i></div>
-                                <ul class="bg-gray-900 text-gray-300">
-                                    <li class=""><div><a href="{{ path('edit_profil') }}">Modifier mes informations</a></div></li>
-                                </ul>
-                            </li>
-                        </ul>
+                    <div class="flex justify-between">
+                        <div>
+                            Référent : {{ referent.nom }} {{ referent.prenom }}
+                        </div>
+                        <div>
+                            <ul id="menu-profil">
+                                <li><div><i class="fas fa-edit"></i></div>
+                                    <ul class="bg-gray-900 text-gray-300">
+                                        <li class=""><div><a href="{{ path('edit_profil') }}">Modifier mes informations</a></div></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
                     <div class="identite flex flex-col items-center mb-8">
                         <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain rounded-full">
                         <div class="flex p-4 text-2xl font-bold">
@@ -177,9 +183,9 @@
                                         {% for user in result %}
                                             <li class="border rounded-2xl shadow-2xl p-2 bg-gray-700 flex flex-col">
                                                 <div>
-                                                    <img src="{{ asset('uploads/photo/' ~ user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain rounded-full">
+                                                    <img src="{{ asset('uploads/photo/' ~ user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain m-auto rounded-full">
                                                     <h2 class="text-center font-bold mb-2">{{ user.nom }} {{ user.prenom }} </h2>
-                                                    <a href="{{ path('view_profil',{'id':user.id }) }}">Voir le profil complet </a>
+                                                    <a href="{{ path('view_profil',{'id':user.id }) }}" class="text-gray-300 underline">Voir le profil complet </a>
                                                 </div>
                                             </li>
                                         {% endfor %}
@@ -201,7 +207,8 @@
                                     <h2 class="text-center font-bold mb-2">Mes propositions :</h2>
                                     <ul>
                                         {% for request in relPending %}
-                                            <li><a href="{{ path('accept_request',{'id':request.id}) }}">{{ request.nom }} {{ request.prenom }}</a></li>
+                                            <li>{{ request.nom }} {{ request.prenom }}    <a href="{{ path('accept_request',{'id':request.id}) }}"><i class="fas fa-user-check"></i></a> / <a
+                                                        href="{{ path('deny_request',{'id':request.id}) }}"><i class="fas fa-times"></i></a></li>
                                     {% endfor %}
                                     </ul>
                                 </div>

@@ -14,9 +14,15 @@
         <div class="col-span-full font-bold text-gray-900 underline">
             <a href="{{ path('search') }}">retour à la recherche</a>
         </div>
+        {% if user.isAvailable %}
         <div class="col-span-full font-bold text-gray-900 underline">
             <a href="{{ path('add_mission',{'id':user.id}) }}">Assigner une mission</a>
         </div>
+        {% else %}
+            <div class="col-span-full font-bold text-gray-900 underline">
+                <a href="{{ path('fin_mission',{'id':user.id}) }}">Mettre fin à la mission</a>
+            </div>
+        {% endif %}
     {% else %}
         <div class="col-span-full font-bold text-gray-900 underline">
             <a href="{{ path('app_profil') }}">retour au profil</a>
@@ -33,9 +39,13 @@
     {% for message in app.flashes('successMission') %}
         <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
     {% endfor %}
+    {% for message in app.flashes('finMission') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+    {% endfor %}
     {% for message in app.flashes('errorMission') %}
         <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
     {% endfor %}
+
     <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
 
     <div class="text-right">
@@ -53,7 +63,7 @@
             <p>{{ user.nom | capitalize }}</p>
         </div>
     </div>
-    {% if user.isAvailable == false %}
+    {% if user.isAvailable == true %}
         <div class="bg-green-300 w-12 h-12 rounded-full m-auto mb-8"></div>
     {% else %}
         <div class="bg-red-300 w-12 h-12 rounded-full m-auto mb-8"></div>

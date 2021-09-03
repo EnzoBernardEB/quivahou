@@ -71,34 +71,6 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $this->competenceOldCategorie=$this->competenceRepository->findBy(['categorie_id'=>$entity->getId()]);
         } elseif ($entity instanceof TypeMission && $entity!==$defaultMission) {
             $this->experienceOldMission=$this->experienceRepository->findBy(['type'=>$entity->getId()]);
-        }elseif ($entity instanceof MissionEnCours) {
-            $typeMission=$this->typeMissionRepository->findOneBy(['intitule'=>'Mission Quivahou']);
-            $user=$entity->getEmploye();
-            $entreprise=$entity->getEntreprise();
-            $experience = new Experience();
-            $experience->setNom($entity->getTitre());
-            $experience->setDescriptif($entity->getDescription());
-            $experience->setEntreprise($entreprise);
-            $experience->setUser($user);
-            $experience->setType($typeMission);
-            $user->setIsAvailable(true);
-            $this->entityManager->persist($experience);
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-            $email = (new Email())
-                ->from('admin@qivahou.net')
-                ->to($user->getEmail())
-                ->subject('Fin de mission')
-                ->text('
-                    Votre mission au sein de '.$entreprise.' a touché à sa fin.
-                    Cette mission à été rajouter dans vos experiences, veuillez la modifier et rajouter toutes les compétences utilisées lors de cette mission.
-                    Cordialement, 
-                    L\équipe Qivahou 
-                ')
-                ->html('<h1>Fin de mission chez '.$entreprise.'</h1> <br> <p>Cette mission à été rajouter dans vos experiences, veuillez la modifier et rajouter toutes les compétences utilisé lors de cette mission.
-                    Cordialement,<br> 
-                    L\'équipe Qivahou</p>');
-            $this->mailer->send($email);
         }
         //si on veut empecher en plus de supprimer les admins
 //        elseif (in_array("ROLE_ADMIN",$role) || $user->getUserIdentifier()===$entity->getUserIdentifier() ) {

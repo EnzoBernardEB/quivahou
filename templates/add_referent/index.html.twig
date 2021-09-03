@@ -20,5 +20,14 @@
             {{ form_widget(formRef.Assigner) }}
         </div>
     </div>
+    {% for message in app.flashes('alredyRef') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('newRef') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('ref') %}
+        <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+    {% endfor %}
     {{ form_end(formRef) }}
 {% endblock %}

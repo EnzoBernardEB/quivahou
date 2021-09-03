@@ -152,6 +152,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $missionEnCours;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="referent")
+     */
+    private $referent;
+
 
     public function __construct()
     {
@@ -163,6 +168,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userHasCompetences = new ArrayCollection();
         $this->collegue = new ArrayCollection();
         $this->collegueRequest = new ArrayCollection();
+        $this->referent = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -616,6 +622,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->missionEnCours = $missionEnCours;
+
+        return $this;
+    }
+
+    public function getReferent(): ?self
+    {
+        return $this->referent;
+    }
+
+    public function setReferent(?self $referent): self
+    {
+        $this->referent = $referent;
+
+        return $this;
+    }
+
+    public function addReferent(self $referent): self
+    {
+        if (!$this->referent->contains($referent)) {
+            $this->referent[] = $referent;
+            $referent->setReferent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferent(self $referent): self
+    {
+        if ($this->referent->removeElement($referent)) {
+            // set the owning side to null (unless already changed)
+            if ($referent->getReferent() === $this) {
+                $referent->setReferent(null);
+            }
+        }
 
         return $this;
     }
