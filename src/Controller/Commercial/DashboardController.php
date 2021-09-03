@@ -4,12 +4,10 @@ namespace App\Controller\Commercial;
 
 use App\Entity\MissionEnCours;
 use App\Entity\User;
-use App\Form\SearchType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -39,6 +37,8 @@ class DashboardController extends AbstractDashboardController
         }
         $userModif=$this->getDoctrine()->getRepository(User::class)->lastModif();
 
+        $myColab=$this->getDoctrine()->getRepository(User::class)->findBy(['referent'=>$this->getUser()]);
+
         return $this->render('commercial/dashboard.html.twig', [
             'colab' => $collab,
             'commercial'=>$commercial,
@@ -48,7 +48,8 @@ class DashboardController extends AbstractDashboardController
             'available'=>$userAvailable,
             'isAdmin'=>$isAdmin,
             'profilModifNumber'=>count($userModif),
-            'profilModif'=>$userModif
+            'profilModif'=>$userModif,
+            'myColab'=>$myColab
         ]);
     }
 

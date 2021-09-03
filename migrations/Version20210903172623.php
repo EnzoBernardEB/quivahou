@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210902210136 extends AbstractMigration
+final class Version20210903172623 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -32,7 +32,7 @@ final class Version20210902210136 extends AbstractMigration
         $this->addSql('CREATE TABLE photo_profil (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, filename VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_B369C5BFA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE relation_user (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, request_user_id INT DEFAULT NULL, pending TINYINT(1) NOT NULL, is_accepted TINYINT(1) NOT NULL, is_deny TINYINT(1) NOT NULL, INDEX IDX_3AB9D5C4A76ED395 (user_id), INDEX IDX_3AB9D5C48D4AA1C2 (request_user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE type_mission (id INT AUTO_INCREMENT NOT NULL, intitule VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, filename_id INT DEFAULT NULL, adresse_id INT DEFAULT NULL, mission_en_cours_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_verified TINYINT(1) NOT NULL, prenom VARCHAR(255) NOT NULL, nom VARCHAR(120) NOT NULL, date_de_naissance DATE NOT NULL, telephone VARCHAR(35) NOT NULL, is_completed TINYINT(1) NOT NULL, is_accepted TINYINT(1) NOT NULL, is_available TINYINT(1) NOT NULL, anniversary_date DATE NOT NULL, modif_date DATE NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D64930335DEA (filename_id), UNIQUE INDEX UNIQ_8D93D6494DE7DC5C (adresse_id), UNIQUE INDEX UNIQ_8D93D64954B3DCCA (mission_en_cours_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, filename_id INT DEFAULT NULL, adresse_id INT DEFAULT NULL, mission_en_cours_id INT DEFAULT NULL, referent_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_verified TINYINT(1) NOT NULL, prenom VARCHAR(255) NOT NULL, nom VARCHAR(120) NOT NULL, date_de_naissance DATE NOT NULL, telephone VARCHAR(35) NOT NULL, is_completed TINYINT(1) NOT NULL, is_accepted TINYINT(1) NOT NULL, is_available TINYINT(1) NOT NULL, anniversary_date DATE NOT NULL, modif_date DATE NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D64930335DEA (filename_id), UNIQUE INDEX UNIQ_8D93D6494DE7DC5C (adresse_id), UNIQUE INDEX UNIQ_8D93D64954B3DCCA (mission_en_cours_id), INDEX IDX_8D93D64935E47E35 (referent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_user (user_source INT NOT NULL, user_target INT NOT NULL, INDEX IDX_F7129A803AD8644E (user_source), INDEX IDX_F7129A80233D34C1 (user_target), PRIMARY KEY(user_source, user_target)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_has_competence (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, competence_id INT DEFAULT NULL, maitrise VARCHAR(255) NOT NULL, is_liked TINYINT(1) NOT NULL, INDEX IDX_19134EB5A76ED395 (user_id), INDEX IDX_19134EB515761DAB (competence_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE competence ADD CONSTRAINT FK_94D4687F8A3C7387 FOREIGN KEY (categorie_id_id) REFERENCES categorie (id) ON DELETE SET NULL');
@@ -50,6 +50,7 @@ final class Version20210902210136 extends AbstractMigration
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D64930335DEA FOREIGN KEY (filename_id) REFERENCES photo_profil (id) ON DELETE SET NULL');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6494DE7DC5C FOREIGN KEY (adresse_id) REFERENCES adress (id) ON DELETE SET NULL');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D64954B3DCCA FOREIGN KEY (mission_en_cours_id) REFERENCES mission_en_cours (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D64935E47E35 FOREIGN KEY (referent_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE user_user ADD CONSTRAINT FK_F7129A803AD8644E FOREIGN KEY (user_source) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE user_user ADD CONSTRAINT FK_F7129A80233D34C1 FOREIGN KEY (user_target) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE user_has_competence ADD CONSTRAINT FK_19134EB5A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
@@ -75,6 +76,7 @@ final class Version20210902210136 extends AbstractMigration
         $this->addSql('ALTER TABLE photo_profil DROP FOREIGN KEY FK_B369C5BFA76ED395');
         $this->addSql('ALTER TABLE relation_user DROP FOREIGN KEY FK_3AB9D5C4A76ED395');
         $this->addSql('ALTER TABLE relation_user DROP FOREIGN KEY FK_3AB9D5C48D4AA1C2');
+        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D64935E47E35');
         $this->addSql('ALTER TABLE user_user DROP FOREIGN KEY FK_F7129A803AD8644E');
         $this->addSql('ALTER TABLE user_user DROP FOREIGN KEY FK_F7129A80233D34C1');
         $this->addSql('ALTER TABLE user_has_competence DROP FOREIGN KEY FK_19134EB5A76ED395');

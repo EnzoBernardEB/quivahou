@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ViewProfilController extends AbstractController
 {
     #[Route('/view/profil/{id}', name: 'view_profil')]
-    public function index(User $user, RelationUserRepository $relationUserRepository): Response
+    public function index(User $user, RelationUserRepository $relationUserRepository, UserRepository $userRepository): Response
     {
         $isVisible=false;
         $isMyCollegue=$relationUserRepository->canSee($user->getId());
@@ -37,12 +37,20 @@ class ViewProfilController extends AbstractController
 
         $isPhoto=file_exists('uploads/photo/'.$user->getFilename());
 
+        if($user->getReferent() !== null) {
+            $referentID=$user->getReferent()->getId();
+        } else {
+            $referentID=null;
+        }
+        $referent=$userRepository->findOneBy(['id'=>$referentID]);
+
         return $this->render('view_profil/index.html.twig', [
             'user' => $user,
             'visible'=>$isVisible,
             'dateAnniversaire'=>$userAnniversaryDate,
             'anciennete'=>$anciennete,
-            'isPhoto'=>$isPhoto
+            'isPhoto'=>$isPhoto,
+            'referent'=>$referent
         ]);
     }
     #[Route('profil/{id}/add/experience', name: 'add_experience_user')]

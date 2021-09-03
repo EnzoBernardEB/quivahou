@@ -1,8 +1,0 @@
-App\Entity\Experience:
-  experience{1..400}:
-    nom: Experience <name()>
-    descriptif: <sentence()>
-    competence_utilise: ['@competence*']
-    type: '@mission*'
-    entreprise: '@entreprise*'
-    user: '@user*'

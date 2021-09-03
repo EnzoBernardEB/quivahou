@@ -49,7 +49,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.prenom LIKE :query OR u.nom LIKE :query')
             ->setParameter('role',$role)
             ->setParameter('query',$value)
-            ->orderBy('u.anniversaryDate', 'ASC')
+            ->orderBy('u.nom', 'ASC')
             ->setMaxResults(20)
             ->getQuery()
             ->getResult();
@@ -69,6 +69,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('roleCo',$roleCollaborateur)
             ->setParameter('value',$value)
             ->orderBy('u.modifDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function isRef()
+    {
+        $roleAdmin = '"ROLE_ADMIN"';
+        $roleCommercial= '"ROLE_COMMERCIAL"';
+        $roleCollaborateur = '"ROLE_COLLABORATEUR"';
+
+        return $this->createQueryBuilder('u')
+            ->andWhere('JSON_CONTAINS(u.roles, :roleCo) = 1 and JSON_CONTAINS(u.roles, :roleA) = 0 and JSON_CONTAINS(u.roles, :roleC) = 0')
+            ->andWhere('u.referent is null')
+            ->setParameter('roleA',$roleAdmin)
+            ->setParameter('roleC',$roleCommercial)
+            ->setParameter('roleCo',$roleCollaborateur)
             ->getQuery()
             ->getResult();
     }

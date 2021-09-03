@@ -17,6 +17,7 @@ use App\Repository\UserHasCompetenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityDeletedEvent;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -50,7 +51,8 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         return [
             BeforeEntityDeletedEvent::class=>['checkBeforeSup'],
             AfterEntityDeletedEvent::class=>['addDefaultValue'],
-            AfterEntityPersistedEvent::class=>['isNotAvailable']
+            AfterEntityPersistedEvent::class=>['isNotAvailable'],
+            AfterEntityUpdatedEvent::class=>['informUser'],
         ];
     }
     public function checkBeforeSup (BeforeEntityDeletedEvent $event)
@@ -105,5 +107,25 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $this->entityManager->persist($user);
             $this->entityManager->flush();
         }
+    }
+
+    public function informUser(AfterEntityUpdatedEvent $event)
+    {
+        $entity = $event->getEntityInstance();
+        if($entity instanceof User) {
+            $email = (new Email())
+                ->from('admin@qivahou.net')
+                ->to($entity->getEmail())
+                ->subject('Votre profil vient d\'être validé ou modifié')
+                ->text('
+                    Votre profil vient d\'être validé ou modifié, veuillez vous connecter à votre compte.
+                    L\'équipe Qivahou
+                ')
+                ->html('<h1>Votre profil vient d\'être validé ou modifié</h1> <br> <p>
+                Votre profil vient d\'être validé ou modifié, veuillez vous connecter à votre compte. <br>
+                    L\'équipe Qivahou </p>');
+            $this->mailer->send($email);
+        }
+
     }
 }

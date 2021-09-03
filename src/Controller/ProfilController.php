@@ -26,11 +26,14 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Symfony\Config\Security\FirewallConfig\RememberMe\TokenProviderConfig;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
 class ProfilController extends AbstractController
 {
+
     #[Route('/', name: 'app_profil')]
     #[IsGranted('ROLE_IS_AUTHENTICATED_FULLY')]
     public function index(EntityManagerInterface $entityManager, Request $request, UserRepository $userRepository, RelationUserRepository $relationUserRepository): Response
@@ -41,12 +44,7 @@ class ProfilController extends AbstractController
         $candidat='ROLE_CANDIDAT';
 
         if($user->getIsAccepted()===true && in_array($candidat,$userRole)) {
-            $role=array_splice($userRole,array_search($candidat,$userRole),1);
-            $userRole=$user->getRoles();
-            $userRole[]='ROLE_COLLABORATEUR';
-            $roleIdenx=array_search('ROLE_CANDIDAT',$userRole);
-            unset($userRole[$roleIdenx]);
-            $user->setRoles($userRole);
+            $user->setRoles(array('ROLE_COLLABORATEUR'));
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -87,8 +85,11 @@ class ProfilController extends AbstractController
         $anciennete = date_diff($actualDate,$userAnniversaryDate);
 
         $ownerExperience =$this->getDoctrine()->getRepository(Experience::class)->findBy(['user'=>$user->getId()]);
-
+        if($user->getReferent() !== null) {
         $referentID=$user->getReferent()->getId();
+        } else {
+            $referentID=null;
+        }
         $referent=$userRepository->findOneBy(['id'=>$referentID]);
 
 
@@ -129,7 +130,7 @@ class ProfilController extends AbstractController
                 ->to($user->getEmail())
                 ->subject('Assignation de mission')
                 ->text('
-                    Votre demande de relatation à été accépté.
+                    Votre demande de relatation à été accepté.
                     L\équipe Qivahou.
                 ')
                 ->html('<h1>Demande de relation à été accepté.</h1> <br> <p> 

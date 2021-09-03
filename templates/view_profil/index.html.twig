@@ -47,9 +47,19 @@
     {% endfor %}
 
     <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
-
-    <div class="text-right">
-        <a href="{{ path('sendRelRequest',{'id':user.id}) }}"><i class="fas fa-user-friends"></i></a>
+    <div class="flex justify-between">
+        {% if app.user.referent is not null %}
+            <div>
+                Référent : {{ referent.nom }} {{ referent.prenom }}
+            </div>
+        {% else %}
+            <div>
+                Référent : Non assigné.
+            </div>
+        {% endif %}
+        <div class="text-right">
+            <a href="{{ path('sendRelRequest',{'id':user.id}) }}"><i class="fas fa-user-friends"></i></a>
+        </div>
     </div>
     <div class="identite flex flex-col items-center mb-8">
         {% if isPhoto %}

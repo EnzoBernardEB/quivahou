@@ -1,17 +1,28 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block main %}
-    Il y à {{ accounts }} {{ accounts > 1 ? 'comptes' : 'compte' }}  . <br>
-    {% if accountsPending > 1 %}
-        <p>{{ accountsPending }} comptes ne sont pas encore validés.</p>
-    {% elseif accountsPending == 1 %}
-        <p>{{ accountsPending }} compte à valider.</p>
-    {% else %}
-        <p>Aucun compte à valider.</p>
-    {% endif %}
+    <div>
+        Il y à {{ accounts }} {{ accounts > 1 ? 'comptes' : 'compte' }}  . <br>
+        {% if accountsPending > 1 %}
+            <p>{{ accountsPending }} comptes ne sont pas encore validés.</p>
+        {% elseif accountsPending == 1 %}
+            <p>{{ accountsPending }} compte à valider.</p>
+        {% else %}
+            <p>Aucun compte à valider.</p>
+        {% endif %}
+    </div>
+    <div>
+        Il y a {{ countNoRef }} collaborateurs sans référent ! <br>
+        <ul>
+            {% for referent in noRef %}
+            <li>{{ referent.prenom }} {{ referent.nom }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ path('add_referent') }}">Assigner les référents</a> <br>
+    </div>
+
     {% if isCommercial %}
         <a href="{{ path('commercial') }}">Panel commercial</a> <br>
     {% endif %}
-    <a href="{{ path('add_referent') }}">Assigner les référents</a> <br>
     <a href="{{ path('app_profil') }}">Retour sur profil</a>
 {% endblock %}

@@ -32,11 +32,16 @@ class DashboardController extends AbstractDashboardController
             $isCommercial=false;
         }
 
+        $userNoReferent=$this->getDoctrine()->getRepository(User::class)->isRef();
+        $countUserNoRef=count($userNoReferent);
+
 
         return $this->render('Admin/dashboard.html.twig', [
             'accounts' => $accounts,
             'accountsPending'=>count($accountsPendingAccept),
             'isCommercial'=>$isCommercial,
+            'countNoRef'=>$countUserNoRef,
+            'noRef'=>$userNoReferent,
         ]);
     }
 

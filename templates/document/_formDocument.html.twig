@@ -4,7 +4,10 @@
 <span class="self-end">
             <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
         </span>
+        {% if app.request.get('_route') == 'add_document' %}
         <p class="absolute top-1.5 right-1.5 font-bold">{{ docNumber }}/2</p>
+        {% endif %}
+
         {% for message in app.flashes('ErrorUploadDocument') %}
             <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
         {% endfor %}

@@ -154,6 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="referent")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $referent;
 

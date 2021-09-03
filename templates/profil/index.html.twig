@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ app.user.prenom | capitalize}} {{ app.user.nom | capitalize}}{% endblock %}
+{% block title %}{{ app.user.prenom | capitalize }} {{ app.user.nom | capitalize }}{% endblock %}
 
 
 
@@ -18,50 +18,67 @@
             <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
         {% endfor %}
         {% if app.user.isVerified and app.user.isCompleted is empty %}
-        <div class="col-span-full mb-4">
-            {% for message in app.flashes('success') %}
-                <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
-            {% endfor %}
+            <div class="col-span-full mb-4">
+                {% for message in app.flashes('success') %}
+                    <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-green-300">{{ message }}</div>
+                {% endfor %}
 
 
-            <div class="m-auto border rounded-2xl p-2 w-9/12 text-2xl text-center text-gray-900 bg-gray-300 underline">
-                <a href="{{ path('search_adress') }}">Veuillez désormais completer votre profil.</a>
+                <div class="m-auto border rounded-2xl p-2 w-9/12 text-2xl text-center text-gray-900 bg-gray-300 underline">
+                    <a href="{{ path('search_adress') }}">Veuillez désormais completer votre profil.</a>
+                </div>
             </div>
-        </div>
 
         {% elseif app.user.isVerified and app.user.isCompleted %}
             {% if app.user.isAccepted %}
-                <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Collaborateur</h1>
+                <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">
+                    Collaborateur</h1>
             {% else %}
-                <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">Candidat</h1>
+                <h1 class="flex justify-center items-center col-span-full text-6xl text-gray-900 font-bold text-center ">
+                    Candidat</h1>
             {% endif %}
             {% for message in app.flashes('oneCompetence') %}
                 <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
             {% endfor %}
-                <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
-                    <div class="flex justify-between">
+            <section class="details-general bg-gray-400 p-2 m-2 col-span-3 ">
+                <div class="flex justify-between">
+                    {% if app.user.referent is not null %}
                         <div>
                             Référent : {{ referent.nom }} {{ referent.prenom }}
                         </div>
+                    {% else %}
                         <div>
-                            <ul id="menu-profil">
-                                <li><div><i class="fas fa-edit"></i></div>
-                                    <ul class="bg-gray-900 text-gray-300">
-                                        <li class=""><div><a href="{{ path('edit_profil') }}">Modifier mes informations</a></div></li>
-                                    </ul>
-                                </li>
-                            </ul>
+                            Référent : Non assigné.
                         </div>
+                    {% endif %}
+                    <div>
+                        <ul id="menu-profil">
+                            <li>
+                                <div><i class="fas fa-edit"></i></div>
+                                <ul class="bg-gray-900 text-gray-300">
+                                    <li class="">
+                                        <div><a href="{{ path('edit_profil') }}">Modifier mes informations</a></div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
+                </div>
 
-                    <div class="identite flex flex-col items-center mb-8">
-                        <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain rounded-full">
-                        <div class="flex p-4 text-2xl font-bold">
-                            <p class="mr-4"> {{app.user.prenom | capitalize}}</p>
-                            <p>{{app.user.nom | capitalize}}</p>
-                        </div>
+                <div class="identite flex flex-col items-center mb-8">
+                    <img src="{{ asset('uploads/photo/' ~ app.user.filename.filename) }}" alt="photo de profil"
+                         class="w-40 object-contain rounded-full">
+                    <div class="flex p-4 text-2xl font-bold">
+                        <p class="mr-4"> {{ app.user.prenom | capitalize }}</p>
+                        <p>{{ app.user.nom | capitalize }}</p>
                     </div>
-                    <div class="detail-individu grid grid-cols-1 gap-4">
+                </div>
+                <div class="detail-individu grid grid-cols-1 gap-4">
+                    {% if app.user.adresse.housenumber == 'N/A' or app.user.adresse.street %}
+                        <div>
+                            {{ app.user.adresse.label }}
+                        </div>
+                    {% else %}
                         <div class="adresse">
                             <span class="titre-detail">Adresse</span> <br>
                             {{ app.user.adresse.housenumber }} {{ app.user.adresse.street }}
@@ -74,25 +91,26 @@
                             <span class="titre-detail">Ville</span> <br>
                             {{ app.user.adresse.city }}
                         </div>
-                        <div class="ancienneté">
-                            <span class="titre-detail">Inscrit depuis le :</span> <br>
-                            {{ dateAnniversaire | date("d/m/Y")}} <br>
-                            {{ anciennete.y }} ans, {{ anciennete.m }} mois et {{ anciennete.d }} jours d'ancienneté.
+                    {% endif %}
+                    <div class="ancienneté">
+                        <span class="titre-detail">Inscrit depuis le :</span> <br>
+                        {{ dateAnniversaire | date("d/m/Y") }} <br>
+                        {{ anciennete.y }} ans, {{ anciennete.m }} mois et {{ anciennete.d }} jours d'ancienneté.
 
-                        </div>
-                        <div class="telephone">
-                            <span class="titre-detail">Téléphone</span> <br>
-                            <tel>{{ telephone }}</tel>
-                        </div>
-                        <div class="competences-principales">
-                            <span class="titre-detail">Compétences principales</span> <br>
-                            <div class="competences grid grid-cols-3 break-words text-xs text-center gap-2">
-                                {% for competence in app.user.userHasCompetences %}
-                                    <div>{{ competence }}</div>
-                                {% endfor %}
-                            </div>
+                    </div>
+                    <div class="telephone">
+                        <span class="titre-detail">Téléphone</span> <br>
+                        <tel>{{ telephone }}</tel>
+                    </div>
+                    <div class="competences-principales">
+                        <span class="titre-detail">Compétences principales</span> <br>
+                        <div class="competences grid grid-cols-3 break-words text-xs text-center gap-2">
+                            {% for competence in app.user.userHasCompetences %}
+                                <div>{{ competence }}</div>
+                            {% endfor %}
                         </div>
                     </div>
+                </div>
             </section>
             <section class="details-avance bg-gray-400 p-2 m-2 col-start-4 col-span-9">
 
@@ -103,56 +121,66 @@
                         <li><a href="#tabs-3">Documents</a></li>
                         <li><a href="#tabs-4">Collaborateurs</a></li>
                     </ul>
-                    <div id="tabs-1" >
+                    <div id="tabs-1">
                         <a href="{{ path('add_experience') }}"><i class="fas fa-plus"></i></a>
                         <div class="grid grid-cols-4 gap-2 mt-10">
                             {% if expNum > 0 %}
-                            {% for experience in app.user.experience %}
-                                <div class="relative flex flex-col justify-center border border-gray-900 shadow-2xl p-2">
-                                    <h2 class="text-center border border-gray-400 shadow-inner p-2 font-bold mb-2 ">{{ experience.nom }}</h2>
-                                    <div class="flex-grow">
-                                        <p class=" mb-2 mr-2"><span class="font-bold">Descriptif : </span>{{ experience.descriptif }}</p>
-                                        <p class="font-bold">Compétences utilisées : </p><ul>
-                                            {% for competence in app.user.userHasCompetences %}
-                                                <li class="inline">{{ competence }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                        <span class="font-bold mb-4">Type de mission : </span><p>{{ experience.type }}</p>
-                                        <div class="absolute bottom-1.5 right-1.5">
-                                            <a href="{{ path('edit_experience', {'id': experience.id}) }}" ><i class="fas fa-edit"></i></a>
-                                            <a href="{{ path('remove_experience',{'id':experience.id}) }}" ><i class="fas fa-trash-alt"></i></a>
-                                        </div>
+                                {% for experience in app.user.experience %}
+                                    <div class="relative flex flex-col justify-center border border-gray-900 shadow-2xl p-2">
+                                        <h2 class="text-center border border-gray-400 shadow-inner p-2 font-bold mb-2 ">{{ experience.nom }}</h2>
+                                        <div class="flex-grow">
+                                            <p class=" mb-2 mr-2"><span
+                                                        class="font-bold">Descriptif : </span>{{ experience.descriptif }}
+                                            </p>
+                                            <p class="font-bold">Compétences utilisées : </p>
+                                            <ul>
+                                                {% for competence in app.user.userHasCompetences %}
+                                                    <li class="inline">{{ competence }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            <span class="font-bold mb-4">Type de mission : </span>
+                                            <p>{{ experience.type }}</p>
+                                            <div class="absolute bottom-1.5 right-1.5">
+                                                <a href="{{ path('edit_experience', {'id': experience.id}) }}"><i
+                                                            class="fas fa-edit"></i></a>
+                                                <a href="{{ path('remove_experience',{'id':experience.id}) }}"><i
+                                                            class="fas fa-trash-alt"></i></a>
+                                            </div>
 
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                                {% else %}
-                                    Aucune experience...
-                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Aucune experience...
+                            {% endif %}
                         </div>
                     </div>
                     <div id="tabs-2">
                         <a href="{{ path('add_competence') }}"><i class="fas fa-plus"></i></a>
                         <ul class="grid grid-cols-4 mt-2 ">
-                        {% for competence in app.user.userHasCompetences %}
-                            <div>
-                                <li class="p-2 relative  mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">
-                                    <div class="mb-10">
-                                        <h2 class="text-center font-bold mb-2">{{ competence }}</h2>
-                                        <p>
-                                            Maitrise : {% if competence.maitrise ==0 %}Débutant{% elseif competence.maitrise ==1 %}Intermédiaire{% else %}Avancé{% endif %}
-                                        </p>
-                                        <p>
-                                            Volonté d'approfondir : {% if competence.isLiked ==true %}Oui{% else %}Non{% endif %}
-                                        </p>
-                                    </div>
-                                    <div class="absolute bottom-1.5 right-1.5">
-                                        <a href="{{ path('edit_competence', {'id': competence.id}) }}"><i class="fas fa-edit"></i></a>
-                                        <a href="{{ path('remove_competence',{'id':competence.id}) }}" ><i class="fas fa-trash-alt"></i></a>
-                                    </div>
-                                </li>
-                            </div>
-                        {% endfor %}
+                            {% for competence in app.user.userHasCompetences %}
+                                <div>
+                                    <li class="p-2 relative  mr-2 border rounded-2xl shadow-2xl text-gray-300 bg-gray-700">
+                                        <div class="mb-10">
+                                            <h2 class="text-center font-bold mb-2">{{ competence }}</h2>
+                                            <p>
+                                                Maitrise
+                                                : {% if competence.maitrise ==0 %}Débutant{% elseif competence.maitrise ==1 %}Intermédiaire{% else %}Avancé{% endif %}
+                                            </p>
+                                            <p>
+                                                Volonté d'approfondir
+                                                : {% if competence.isLiked ==true %}Oui{% else %}Non{% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="absolute bottom-1.5 right-1.5">
+                                            <a href="{{ path('edit_competence', {'id': competence.id}) }}"><i
+                                                        class="fas fa-edit"></i></a>
+                                            <a href="{{ path('remove_competence',{'id':competence.id}) }}"><i
+                                                        class="fas fa-trash-alt"></i></a>
+                                        </div>
+                                    </li>
+                                </div>
+                            {% endfor %}
                         </ul>
                     </div>
                     <div id="tabs-3">
@@ -160,77 +188,93 @@
                             {% for document in app.user.documents %}
                                 <div class="mb-4">
                                     <ul class="flex">
-                                        <li><a class="mr-4" href="{{ asset('uploads/document/' ~ document) }}" target="_blank" ><i class="fas fa-search-plus"></i></a></li>
-                                        <li><a class="mr-4" href="{{ path('app_view_document',{'id':document.id}) }}" ><i class="fas fa-download"></i></a></li>
-                                        <li><a href="{{ path('edit_document',{'id':document.id}) }}"><i class="fas fa-edit"></i></a></li>
+                                        <li><a class="mr-4" href="{{ asset('uploads/document/' ~ document) }}"
+                                               target="_blank"><i class="fas fa-search-plus"></i></a></li>
+                                        <li><a class="mr-4" href="{{ path('app_view_document',{'id':document.id}) }}"><i
+                                                        class="fas fa-download"></i></a></li>
+                                        <li><a href="{{ path('edit_document',{'id':document.id}) }}"><i
+                                                        class="fas fa-edit"></i></a></li>
                                     </ul>
-                                    <embed src="{{ asset('uploads/document/' ~ document) }}" height="500" width="100%" class="mb-4">
+                                    <embed src="{{ asset('uploads/document/' ~ document) }}" height="500" width="100%"
+                                           class="mb-4">
                                 </div>
                             {% endfor %}
                         </div>
                     </div>
                     <div id="tabs-4">
-                        {% if is_granted('ROLE_COLLABORATEUR')%}
-                        <div class="flex flex-col">
-                            {{ form_start(form,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
-                            {{ form_label(form.query) }}
-                            {{ form_widget(form.query) }}
-                            {{ form_label(form.Rechercher) }}
-                            {{ form_end(form) }}
-                            {% if result is not empty %}
-                                <ul class="grid grid-cols-4 gap-4 p-2 ">
-                                    {% if result > 0 %}
-                                        {% for user in result %}
-                                            <li class="border rounded-2xl shadow-2xl p-2 bg-gray-700 flex flex-col">
-                                                <div>
-                                                    <img src="{{ asset('uploads/photo/' ~ user.filename.filename) }}" alt="photo de profil" class="w-40 object-contain m-auto rounded-full">
-                                                    <h2 class="text-center font-bold mb-2">{{ user.nom }} {{ user.prenom }} </h2>
-                                                    <a href="{{ path('view_profil',{'id':user.id }) }}" class="text-gray-300 underline">Voir le profil complet </a>
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    {% else %}
-                                        <li>Pas de résultat</li>
-                                    {% endif %}
-                                </ul>
-                            {% endif %}
-                            <div class="grid grid-cols-3 mt-10">
-                                <div class="grid-col-1">
-                                    <h2 class="text-center font-bold mb-2">Mes demandes :</h2>
-                                    <ul>
-                                        {% for request in relSend %}
-                                            <li><a href="{{ path('view_profil',{'id':request.id}) }}">{{ request.nom }} {{ request.prenom }}</a></li>
-                                        {% endfor %}
+                        {% if is_granted('ROLE_COLLABORATEUR') %}
+                            <div class="flex flex-col">
+                                {{ form_start(form,{'attr': {'class': 'flex flex-col bg-gray-300 rounded-2xl shadow-2xl p-4 m-auto w-9/12 border-2'}}) }}
+                                {{ form_label(form.query) }}
+                                {{ form_widget(form.query) }}
+                                {{ form_label(form.Rechercher) }}
+                                {{ form_end(form) }}
+                                {% if result is not empty %}
+                                    <ul class="grid grid-cols-4 gap-4 p-2 ">
+                                        {% if result > 0 %}
+                                            {% for user in result %}
+                                                <li class="border rounded-2xl shadow-2xl p-2 bg-gray-700 flex flex-col">
+                                                    <div>
+                                                        <img src="{{ asset('uploads/photo/' ~ user.filename.filename) }}"
+                                                             alt="photo de profil"
+                                                             class="w-40 object-contain m-auto rounded-full">
+                                                        <h2 class="text-center font-bold mb-2 text-gray-300">{{ user.nom }} {{ user.prenom }} </h2>
+                                                        <a href="{{ path('view_profil',{'id':user.id }) }}"
+                                                           class="text-gray-300 underline">Voir le profil complet </a>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li>Pas de résultat</li>
+                                        {% endif %}
                                     </ul>
+                                {% endif %}
+                                <div class="grid grid-cols-3 mt-10">
+                                    <div class="grid-col-1">
+                                        <h2 class="text-center font-bold mb-2">Mes demandes :</h2>
+                                        <ul>
+                                            {% for request in relSend %}
+                                                <li>
+                                                    <a href="{{ path('view_profil',{'id':request.id}) }}">{{ request.nom }} {{ request.prenom }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
-                                <div class="grid-col-2">
-                                    <h2 class="text-center font-bold mb-2">Mes propositions :</h2>
-                                    <ul>
-                                        {% for request in relPending %}
-                                            <li>{{ request.nom }} {{ request.prenom }}    <a href="{{ path('accept_request',{'id':request.id}) }}"><i class="fas fa-user-check"></i></a> / <a
-                                                        href="{{ path('deny_request',{'id':request.id}) }}"><i class="fas fa-times"></i></a></li>
-                                    {% endfor %}
-                                    </ul>
-                                </div>
-                                <div class="grid-col-3">
-                                    <h2 class="text-center font-bold mb-2">Mes collegues :</h2>
-                                    <ul>
-                                        {% for request in collegue %}
-                                            <li><a href="{{ path('view_profil',{'id':request.id}) }}">{{ request.nom }} {{ request.prenom }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
+                                    <div class="grid-col-2">
+                                        <h2 class="text-center font-bold mb-2">Mes propositions :</h2>
+                                        <ul>
+                                            {% for request in relPending %}
+                                                <li>{{ request.nom }} {{ request.prenom }} <a
+                                                            href="{{ path('accept_request',{'id':request.id}) }}"><i
+                                                                class="fas fa-user-check"></i></a> / <a
+                                                            href="{{ path('deny_request',{'id':request.id}) }}"><i
+                                                                class="fas fa-times"></i></a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="grid-col-3">
+                                        <h2 class="text-center font-bold mb-2">Mes collegues :</h2>
+                                        <ul>
+                                            {% for request in collegue %}
+                                                <li>
+                                                    <a href="{{ path('view_profil',{'id':request.id}) }}">{{ request.nom }} {{ request.prenom }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
 
+                                </div>
                             </div>
-                        </div>
                         {% else %}
-                        <p class="mt-10 font-bold text-center">Vous n'êtes pas encore autorisé à utiliser cette fonctionnalité.</p>
+                            <p class="mt-10 font-bold text-center">Vous n'êtes pas encore autorisé à utiliser cette
+                                fonctionnalité.</p>
                         {% endif %}
                     </div>
                 </div>
             </section>
-            {% else %}
-                <p class="col-span-full text-4xl text-gray-300">Veuillez confirmez votre adresse email avant de continuer sur Qivahou</p>
+        {% else %}
+            <p class="col-span-full text-4xl text-gray-300">Veuillez confirmez votre adresse email avant de
+                continuer sur Qivahou</p>
         {% endif %}
     {% endif %}
 {% endblock %}

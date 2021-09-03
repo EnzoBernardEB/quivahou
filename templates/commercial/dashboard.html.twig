@@ -43,6 +43,14 @@
             </ul>
         </div>
     </div>
+    <div class="mt-10">
+        <h1 class="font-bold">Mes collaborateurs :</h1>
+        <ul>
+            {% for colab in myColab %}
+             <li><a href="{{ path('view_profil',{'id': colab.id}) }}">{{ colab.prenom }} {{ colab.nom }}</a> </li>
+            {% endfor %}
+        </ul>
+    </div>
 
     {% if isAdmin %}
         <a  href="{{ path('admin') }}">Panel admin</a> <br>
