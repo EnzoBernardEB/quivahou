@@ -100,13 +100,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=PhotoProfil::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $filename;
 
     /**
      * @ORM\OneToOne(targetEntity=Adress::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $adresse;
 

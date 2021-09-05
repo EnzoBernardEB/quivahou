@@ -10,11 +10,13 @@
         <button class="p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4">{{ button_label|default('Ajouter') }}</button>
     </span>
 <p class="absolute top-1.5 right-1.5 font-bold">{{ photoNumber }}/1</p>
-{% if fini and app.request.get('_route') == 'add_document' %}
+{% if app.request.get('_route') == 'add_document' %}
+    {% if fini %}
         <div class="rounded-2xl shadow-2xl">
             <a href="{{ path('app_inscription_fini') }}" class="p-2 underline font-bold border bg-gray-700 text-gray-300">Inscription
                 fini.</a>
         </div>
+        {% endif %}
 {% endif %}
 {% for message in app.flashes('ErrorUploadImage') %}
 <div class="flex justify-center items-center my-2 p-2 text-gray-900 col-span-full border rounded-2xl bg-red-300">{{ message }}</div>
