@@ -15,3 +15,18 @@ Lancer le serveur symfony -> symfony serve -d
 
 Voila, plus qu'a tester... Il est loin d'être parfait, plein de chose a optimiser, à refaire autrement mais je me suis focaliser sur les fonctionnalités,
 d'abord trouver un moyen de le faire et l'optimisation plus tard si y a le temps.
+
+Admin : admin@qivhaou.net
+mdp : testtttt
+
+Commercial : commercial{x}@qivahou.net  x-> [1 à 5]
+mdp : testtttt
+
+collaborateur: jean.bon@gmail.com
+mdp : testtttt
+
+candidat : julie.roman@gmail.com
+mdp : testtttt
+
+jean bon visibilité avec gislaine purkoton (purkoton@hotmail.com)
+jean bon demande collegue avec julie roman en attente (julie.roman@gmail.com)
