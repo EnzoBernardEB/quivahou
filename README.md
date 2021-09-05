@@ -1,6 +1,6 @@
 # quivahou ECF Symfony
 
-#Principe de la plateforme :
+##Principe de la plateforme :
 
 C'est une plateforme sur laquelle on peut s'inscire et suivre un parcours d'inscription ou l'on renseigne ses compétences, ses experiences, son adresse et pour finir on partage un cv+LM ainsi qu'une photo de profil.
 
@@ -12,7 +12,7 @@ Le collaborateur peut en ajouter/modifier compétences/experiences/informations 
 
 
 ------------------------------
-#Installation
+##Installation
 
 -Composer install
 -yarn install
