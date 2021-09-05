@@ -33,3 +33,11 @@ $( function() {
 // Add fontawsome
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
+
+//Print cv
+
+
+$("#btn").click(function (){
+    $("print-non-anonyme").show();
+    window.print();
+});

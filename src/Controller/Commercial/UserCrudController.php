@@ -42,7 +42,7 @@ class UserCrudController extends AbstractCrudController
         return $actions
             // ...
             ->setPermission(Action::NEW, 'ROLE_ADMIN')
-            ->setPermission(Action::EDIT, 'ROLE_ADMIN')
+            ->setPermission(Action::EDIT, 'ROLE_COMMERCIAL')
             ->setPermission(Action::DELETE, 'ROLE_ADMIN')
             ->setPermission(Action::BATCH_DELETE, 'ROLE_ADMIN')
             ;

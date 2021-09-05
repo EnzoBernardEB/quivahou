@@ -42,8 +42,6 @@ class ProfilController extends AbstractController
         $user=$this->getUser();
         $userRole=$user->getRoles();
         $candidat='ROLE_CANDIDAT';
-        $test=$this->getUser()->getExperience()->getValues();
-        dd($test);
 
         if($user->getIsAccepted()===true && in_array($candidat,$userRole)) {
             $user->setRoles(array('ROLE_COLLABORATEUR'));
@@ -96,6 +94,7 @@ class ProfilController extends AbstractController
 
 
         return $this->render('profil/index.html.twig', [
+            'user'=>$user,
             'telephone' => $userTel,
             'form'=>$searchCollab->createView(),
             'result'=>$result,

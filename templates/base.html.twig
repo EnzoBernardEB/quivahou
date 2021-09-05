@@ -13,9 +13,15 @@
 <body class="h-screen">
 <header class="relative flex items-center justify-between p-4 h-24 bg-gray-700 text-gray-300">
     {% block header %}
+        {% if app.user and 'ROLE_COMMERCIAL' not in app.user.roles  %}
         <div class="text-4xl font-bold self-left">
             <a href="{{ path('app_profil') }}">Qivahou</a>
         </div>
+        {% else %}
+            <div class="text-4xl font-bold self-left">
+                <a href="{{ path('commercial') }}">Qivahou</a>
+            </div>
+        {% endif %}
         <div class="">
             {% if app.user %}
                 <div class="mb-3 flex flex-col justify-center items-end">

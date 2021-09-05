@@ -7,6 +7,9 @@
     {% endblock %}
 
 {% block main %}
+    <div>
+        <a href="{{ path('archive') }}">Voir les archives</a>
+    </div>
     <div class="mt-10 mb-10 text-center border-2 border-green-600 bg-green-300 p-2">
         <a href="{{ path('search') }}" >Effectuer une recherche</a>
     </div>
@@ -37,17 +40,25 @@
         </div>
         <div class="grid-col-3">
             <ul>
-                {% for candidat in available %}
-                    <li><a href="{{ path('view_profil',{'id':candidat.id}) }}">{{ candidat.prenom }} {{ candidat.nom }}</a></li>
+                {% for user in available %}
+                    <li><a href="{{ path('view_profil',{'id':user.id}) }}">{{ user.prenom }} {{ user.nom }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </div>
     <div class="mt-10">
-        <h1 class="font-bold">Mes collaborateurs :</h1>
+        <h2 class="font-bold">Mes collaborateurs :</h2>
         <ul>
             {% for colab in myColab %}
              <li><a href="{{ path('view_profil',{'id': colab.id}) }}">{{ colab.prenom }} {{ colab.nom }}</a> </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mt-10">
+        <h2 class="font-bold">Candidats actuels :</h2>
+        <ul>
+            {% for candidat in candidats %}
+            <li><a href="{{ path('view_profil',{'id': candidat.id}) }}">{{ candidat.prenom }} {{ candidat.nom }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -55,4 +66,5 @@
     {% if isAdmin %}
         <a  href="{{ path('admin') }}">Panel admin</a> <br>
     {% endif %}
+
 {% endblock %}

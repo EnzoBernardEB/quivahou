@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Archive;
 use App\Entity\Categorie;
 use App\Entity\Competence;
 use App\Entity\Entreprise;
@@ -59,6 +60,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Compétence', 'fas fa-clipboard-list ', Competence::class);
         yield MenuItem::linkToCrud('Type experience', 'fas fa-align-justify ', TypeMission::class);
         yield MenuItem::linkToCrud('Entreprise', 'fas fa-building', Entreprise::class);
+        yield MenuItem::linkToCrud('Archive', 'fas fa-archive', Archive::class);
     }
 
 }

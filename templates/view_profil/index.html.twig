@@ -112,7 +112,7 @@
         </div>
         </section>
         <section class="details-avance bg-gray-400 p-2 m-2 col-start-4 col-span-9">
-
+            <p>Imprimer la fiche : <a href="{{ path('extraction_cv',{'id':user.id}) }}" class="underline">normal</a> ou <a class="underline" href="{{ path('extraction_cv_anonyme',{'id':user.id}) }}">anonyme</a></p>
             <div id="tabs">
                 <ul>
                     <li><a href="#tabs-1">Expériences</a></li>

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ArchiveController!{% endblock %}
+
+{% block body %}
+    <div class="col-span-full">
+        {% if archives is not empty %}
+            <ul >
+                {% if archives > 0 %}
+                    {% for user in archives %}
+                        <li class="border rounded-2xl shadow-2xl p-2 bg-gray-300 flex flex-col my-4">
+                            <div>
+                                <h2 class="text-center font-bold mb-2 text-gray-700"> {{ user.prenom }} {{ user.nom }} </h2>
+                                <p class="italic font-thin text-center text-gray-700">{{ user.email }}</p>
+                                <p class="text-center font-bold text-gray-700">À quitté l'entreprise.</p><br>
+                                <div>
+                                    <h2 class="font-bold  mb-4">Compétences :</h2>
+                                    <ul>
+                                        {% for competence in user.competence %}
+                                            <li>{{ competence }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h2 class="font-bold  mb-4 mt-2">Experiences :</h2>
+                                    <h3 class="underline">Anciennes experiences :</h3>
+                                    <ul>
+                                        {% if user.experience.ancien is not empty %}
+                                            {% for experience in user.experience.ancien %}
+                                                <li>{{ experience }}</li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li>Pas d'experience antérieure</li>
+                                        {% endif %}
+                                    </ul>
+                                    <h3 class="underline">Experiences Qivahou :</h3>
+                                    <ul>
+                                        {% if user.experience.qivahou is not empty %}
+                                            {% for experience in user.experience.qivahou %}
+                                                <li>{{ experience }}</li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li>Pas d'experience lié à Qivahou</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>Pas de résultat</li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

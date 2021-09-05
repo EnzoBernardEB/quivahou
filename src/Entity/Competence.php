@@ -32,12 +32,6 @@ class Competence
     private $categorie_id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="competence_id")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $users;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Experience::class, mappedBy="competence_utilise")
      */
     private $experiences;
@@ -85,33 +79,6 @@ class Competence
     public function setCategorieId(?Categorie $categorie_id): self
     {
         $this->categorie_id = $categorie_id;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->addCompetenceId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeCompetenceId($this);
-        }
 
         return $this;
     }

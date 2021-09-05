@@ -2,6 +2,7 @@
 
 namespace App\Controller\Commercial;
 
+use App\Entity\Archive;
 use App\Entity\MissionEnCours;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -19,11 +20,14 @@ class DashboardController extends AbstractDashboardController
         $allUser = $this->getDoctrine()->getRepository(User::class)->findAll();
         $userCollaborateur=[];
         $userCommercial=[];
+        $userCandidat=[];
         $userAvailable= $this->getDoctrine()->getRepository(User::class)->isAvailable(1);
         foreach ($allUser as $user) {
             $userRole=$user->getRoles();
             if (in_array('ROLE_COLLABORATEUR',$userRole)) {
                 $userCollaborateur[]=$user;
+            } elseif(in_array('ROLE_CANDIDAT',$userRole)) {
+                $userCandidat[]=$user;
             }
         }
         $collab=count($userCollaborateur);
@@ -49,7 +53,8 @@ class DashboardController extends AbstractDashboardController
             'isAdmin'=>$isAdmin,
             'profilModifNumber'=>count($userModif),
             'profilModif'=>$userModif,
-            'myColab'=>$myColab
+            'myColab'=>$myColab,
+            'candidats'=>$userCandidat
         ]);
     }
 
@@ -64,5 +69,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-address-card', User::class);
         yield MenuItem::linkToCrud('Missions', 'fas fa-address-card', MissionEnCours::class);
+        yield MenuItem::linkToCrud('Archives', 'fas fa-archive', Archive::class);
     }
 }

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche Qivahou{% endblock %}
+    {% block header %}
+        <div class="text-4xl text-center font-bold self-left">
+            <h1>Fiche Qivahou</h1>
+        </div>
+{% endblock %}
+{% block body %}
+    <a href="{{ path('app_profil') }}" class="text-gray-300">Retour</a>
+    <div class=" col-span-full" id="print-non-anonyme">
+        <div class="mt-4">
+            <p>Nom : {{ user.nom }}</p>
+            <p>Prénom : {{ user.prenom }}</p>
+            <p>Email : {{ user.email }}</p>
+            <p>Adresse : {{ adresse }}</p>
+        </div>
+        <div>
+            <h2 class="font-bold  mb-4">Compétences :</h2>
+            <ul>
+                {% for comp in competence %}
+                    <li>{{ comp}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <h2 class="font-bold  mb-4 mt-2">Experiences :</h2>
+            <h3 class="underline">Anciennes experiences :</h3>
+            <ul>
+                {% if experienceAncienne is not empty %}
+                    {% for experience in experienceAncienne %}
+                        <li>{{ experience }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>Pas d'experience antérieure</li>
+                {% endif %}
+            </ul>
+            <h3 class="underline">Experiences Qivahou :</h3>
+            <ul>
+                {% if experienceQivahou is not empty %}
+                    {% for experience in experienceQivahou %}
+                        <li>{{ experience }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>Pas d'experience lié à Qivahou</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <input type="button" id="btn" class="col-span-full p-2 border-2  bg-gray-900 text-gray-200 rounded-2xl mt-4 cursor-pointer" onclick="printCV();" value="Imprimer le cv"/>
+
+{% endblock %}
