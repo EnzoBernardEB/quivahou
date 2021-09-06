@@ -17,6 +17,7 @@ Le collaborateur peut en ajouter/modifier compétences/experiences/informations 
 -Composer install
 -yarn install
 -yarn dev
+Il y à plusieurs fonctionnalité qui sont accompagné de l'envoi d'un mail. En developpement il faut lancer la commande -> maildev --hide-extensions STARTTLS pour lancer le mailcatcher sous peine d'avoir une erreur. 
 
 Récupérer le dossier BDD dans le moodle cefim
 Ajouter dans le dossier uploads public du projet, il contient quelque photo et document pour une inscription sur la plateforme.
@@ -27,8 +28,8 @@ Puis importer le fichier .sql du dossier BDD dans la base de donnée
 
 Lancer le serveur symfony -> symfony serve -d
 
-Voila, plus qu'a tester... Il est loin d'être parfait, plein de chose a optimiser, à refaire autrement mais je me suis focaliser sur les fonctionnalités,
-d'abord trouver un moyen de le faire et l'optimisation plus tard si y a le temps.
+Voila, plus qu'a tester... Il est loin d'être parfait, plein de chose a optimiser, à refaire autrement mais je me suis focaliser sur les fonctionnalités. Ce projet à été réalisé dans un contexte particulier avec plein de coupure, j'ai developpé un peu par ci, un peu par la et je pense que ça se ressent sur la qualité du code. Le même projet dans un autre contexte inintérrompu serait totalement différent de celui je pense.
+Mais globalement le projet à été apprécié, un peu de frustration de le rendre comme ça !
 
 Admin : admin@qivhaou.net
 mdp : testtttt
